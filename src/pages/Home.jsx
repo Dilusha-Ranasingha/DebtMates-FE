@@ -2,9 +2,9 @@ import React from 'react'
 
 const Home = () => {
   return (
-    <div style={{ padding: '2rem' }}>
-      <h1>Welcome to DebtMates</h1>
-      <p>This is the homepage of our Debt Management app.</p>
+    <div className="p-8">
+      <h1 className="text-3xl font-bold">Welcome to DebtMates</h1>
+      <p className="mt-4 text-lg">This is the homepage of our Debt Management app.</p>
     </div>
   )
 }

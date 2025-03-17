@@ -2,7 +2,7 @@ import React from 'react'
 
 const Footer = () => {
   return (
-    <footer style={{ padding: '1rem', background: '#333', color: '#fff', textAlign: 'center' }}>
+    <footer className="p-4 bg-gray-800 text-white text-center">
       <p>&copy; 2025 DebtMates. All rights reserved.</p>
     </footer>
   )

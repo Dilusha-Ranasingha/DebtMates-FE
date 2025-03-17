@@ -3,13 +3,13 @@ import { Link } from 'react-router-dom'
 
 function Navbar() {
   return (
-    <nav style={{ padding: '1rem', background: '#333', color: '#fff' }}>
-      <ul style={{ listStyle: 'none', display: 'flex', gap: '1rem' }}>
+    <nav className="p-4 bg-gray-800 text-white">
+      <ul className="list-none flex gap-4">
         <li>
-          <Link to="/" style={{ color: '#fff', textDecoration: 'none' }}> Home </Link>
+          <Link to="/" className="text-white no-underline"> Home </Link>
         </li>
         <li>
-          <Link to="/about" style={{ color: '#fff', textDecoration: 'none' }}> About </Link>
+          <Link to="/about" className="text-white no-underline"> About </Link>
         </li>
       </ul>
     </nav>
