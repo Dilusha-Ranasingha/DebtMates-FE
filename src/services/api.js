@@ -1,11 +1,16 @@
 // src/services/api.js
 import axios from 'axios';
 
-const API = axios.create({
-  baseURL: 'http://localhost:8080/api',
+const API_URL = 'http://localhost:8080/api';
+
+const api = axios.create({
+  baseURL: API_URL,
+  headers: {
+    'Content-Type': 'application/json',
+  },
 });
 
-API.interceptors.request.use((config) => {
+api.interceptors.request.use((config) => {
   const token = localStorage.getItem('token');
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
@@ -13,38 +18,16 @@ API.interceptors.request.use((config) => {
   return config;
 });
 
-export const registerUser = (userData) =>
-  API.post('/auth/register', userData);
-
-export const loginUser = (userData) =>
-  API.post('/auth/login', userData);
-
-export const logoutUser = () =>
-  API.post('/auth/logout');
-
-export const requestPasswordReset = (emailData) =>
-  API.post('/auth/password-reset/request', emailData);
-
-export const confirmPasswordReset = (resetData) =>
-  API.post('/auth/password-reset/confirm', resetData);
-
-export const getAllUsers = (page = 0, size = 10) =>
-  API.get(`/admin/users?page=${page}&size=${size}`);
-
-export const getAllAdmins = (page = 0, size = 10) =>
-  API.get(`/admin/admins?page=${page}&size=${size}`);
-
-export const deleteUser = (id) =>
-  API.delete(`/admin/users/${id}`);
-
-export const getProfile = () =>
-  API.get('/user/profile');
-
-export const updateProfile = (profileData) =>
-  API.put('/user/profile', profileData);
-
-export const getUserById = (id) =>
-  API.get(`/admin/users/${id}`);
-
-export const updateUser = (id, userData) =>
-  API.put(`/admin/users/${id}`, userData);
+export const loginUser = (data) => api.post('/auth/login', data);
+export const registerUser = (data) => api.post('/auth/register', data, {
+  headers: { Authorization: localStorage.getItem('token') ? `Bearer ${localStorage.getItem('token')}` : '' },
+});
+export const getProfile = () => api.get('/user/profile');
+export const updateProfile = (data) => api.put('/user/profile', data);
+export const getAllUsers = (page) => api.get(`/admin/users?page=${page}`);
+export const getAllAdmins = (page) => api.get(`/admin/admins?page=${page}`);
+export const getUserById = (id) => api.get(`/admin/users/${id}`);
+export const updateUser = (id, data) => api.put(`/admin/users/${id}`, data);
+export const deleteUser = (id) => api.delete(`/admin/users/${id}`);
+export const requestPasswordReset = (data) => api.post('/auth/password-reset/request', data);
+export const confirmPasswordReset = (data) => api.post('/auth/password-reset/confirm', data);
