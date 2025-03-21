@@ -1,19 +1,56 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+// src/components/Navbar.jsx
+import { Link, useNavigate } from 'react-router-dom';
 
-function Navbar() {
+const Navbar = () => {
+  const navigate = useNavigate();
+  const token = localStorage.getItem('token');
+  const isAdmin = localStorage.getItem('role') === 'ADMIN';
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('role');
+    navigate('/user-login');
+  };
+
   return (
-    <nav className="p-4 bg-gray-800 text-white">
-      <ul className="list-none flex gap-4">
-        <li>
-          <Link to="/" className="text-white no-underline"> Home </Link>
-        </li>
-        <li>
-          <Link to="/about" className="text-white no-underline"> About </Link>
-        </li>
-      </ul>
+    <nav className="bg-gradient-to-r from-blue-600 to-blue-800 p-4 shadow-lg animate-slideIn">
+      <div className="container mx-auto flex justify-between items-center">
+        <Link to="/" className="text-white text-2xl font-bold">
+          DebtMates
+        </Link>
+        <div className="space-x-4">
+          {token ? (
+            <>
+              <Link to="/profile" className="text-white hover:text-blue-200">
+                View Profile
+              </Link>
+              {isAdmin && (
+                <Link to="/admin" className="text-white hover:text-blue-200">
+                  Admin Dashboard
+                </Link>
+              )}
+              <button
+                onClick={handleLogout}
+                className="text-white hover:text-blue-200"
+              >
+                Logout
+              </button>
+            </>
+          ) : (
+            <>
+              <Link to="/user-login" className="text-white hover:text-blue-200">
+                User Login
+              </Link>
+              <Link to="/user-register" className="text-white hover:text-blue-200">
+                User Register
+              </Link>
+              {/* Removed Admin Login and Admin Register links */}
+            </>
+          )}
+        </div>
+      </div>
     </nav>
-  )
-}
+  );
+};
 
-export default Navbar
+export default Navbar;
