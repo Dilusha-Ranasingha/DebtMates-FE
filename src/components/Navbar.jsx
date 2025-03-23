@@ -56,12 +56,13 @@ const Navbar = () => {
             </>
           ) : (
             <>
-              <Link to="/user-login" className="text-white hover:text-blue-200">
+              {/* <Link to="/user-login" className="text-white hover:text-blue-200">
                 User Login
               </Link>
               <Link to="/user-register" className="text-white hover:text-blue-200">
                 User Register
-              </Link>
+              </Link> */}
+              
               {/* Removed Admin Login and Admin Register links */}
             </>
           )}
