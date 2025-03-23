@@ -103,7 +103,7 @@ const AdminDashboard = () => {
             View Profile
           </button>
         </div>
-        <div className="mb-6">
+        <div className="mb-6 space-x-2">
           <button
             onClick={() => setTab('users')}
             className={`px-4 py-2 mr-2 rounded-lg ${
@@ -124,6 +124,15 @@ const AdminDashboard = () => {
               } hover:bg-blue-500 hover:text-white transition`}
             >
               Admins
+            </button>
+
+          )}
+          {isSuperAdmin && (
+            <button
+              onClick={() => navigate('/admin-register')}
+              className={`px-4 py-2 bg-gray-200 text-gray-70 rounded-lg hover:bg-blue-500 hover:text-white transition`}
+            >
+              Add Admins
             </button>
           )}
         </div>

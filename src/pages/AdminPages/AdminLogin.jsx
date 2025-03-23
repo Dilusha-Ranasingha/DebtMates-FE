@@ -99,12 +99,12 @@ const AdminLogin = () => {
             Reset it
           </a>
         </p>
-        <p className="mt-2 text-center">
+        {/* <p className="mt-2 text-center">
           Don't have an account?{' '}
           <a href="/admin-register" className="text-blue-600 hover:underline">
             Register
           </a>
-        </p>
+        </p> */}
       </div>
       <Toaster />
     </div>
