@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import toast, { Toaster } from 'react-hot-toast';
+import Swal from 'sweetalert2';
 import InputField from '../../components/InputField';
 import { loginUser } from '../../services/api';
 
@@ -52,7 +53,13 @@ const UserLogin = () => {
         return;
       }
 
-      toast.success('Login successful!');
+      Swal.fire({
+        position: "top-end",
+        icon: "success",
+        title: "Login successful!",
+        showConfirmButton: false,
+        timer: 1500,
+      });
       navigate('/');
     } catch (error) {
       toast.error(error.response?.data || 'Login failed');
@@ -82,10 +89,7 @@ const UserLogin = () => {
             onChange={handleChange}
             error={errors.password}
           />
-          <button
-            type="submit"
-            className="w-full btn-primary"
-          >
+          <button type="submit" className="w-full btn-primary">
             Login
           </button>
         </form>

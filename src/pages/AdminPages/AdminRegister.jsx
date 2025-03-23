@@ -2,8 +2,10 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import toast, { Toaster } from 'react-hot-toast';
+import Swal from 'sweetalert2';
 import InputField from '../../components/InputField';
 import { registerUser } from '../../services/api';
+import evaluatePasswordStrength from '../../utils/passwordStrength';
 
 const AdminRegister = () => {
   const navigate = useNavigate();
@@ -13,15 +15,32 @@ const AdminRegister = () => {
     email: '',
   });
   const [errors, setErrors] = useState({});
+  const [passwordStrength, setPasswordStrength] = useState({
+    strength: '',
+    color: '',
+    score: 0,
+  });
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+
+    if (name === 'password') {
+      const strength = evaluatePasswordStrength(value);
+      setPasswordStrength(strength);
+    }
   };
 
   const validate = () => {
     const newErrors = {};
     if (!formData.username) newErrors.username = 'Username is required';
     if (!formData.password) newErrors.password = 'Password is required';
+    else {
+      const strength = evaluatePasswordStrength(formData.password);
+      if (strength.score < 3) {
+        newErrors.password = 'Password must be at least Medium strength';
+      }
+    }
     if (!formData.email) newErrors.email = 'Email is required';
     else if (!/\S+@\S+\.\S+/.test(formData.email))
       newErrors.email = 'Email is invalid';
@@ -44,7 +63,13 @@ const AdminRegister = () => {
         return;
       }
       await registerUser(formData);
-      toast.success('Admin registration successful! Please login.');
+      Swal.fire({
+        position: "top-end",
+        icon: "success",
+        title: "Admin registration successful! Please login.",
+        showConfirmButton: false,
+        timer: 1500,
+      });
       navigate('/admin-login');
     } catch (error) {
       toast.error(error.response?.data || 'Registration failed');
@@ -82,10 +107,20 @@ const AdminRegister = () => {
             onChange={handleChange}
             error={errors.password}
           />
-          <button
-            type="submit"
-            className="w-full btn-primary"
-          >
+          {formData.password && (
+            <div className="mb-4">
+              <div className="text-sm text-gray-700">
+                Password Strength: <span className={`font-bold ${passwordStrength.color.replace('bg-', 'text-')}`}>{passwordStrength.strength}</span>
+              </div>
+              <div className="w-full bg-gray-200 rounded-full h-2.5 mt-1">
+                <div
+                  className={`h-2.5 rounded-full ${passwordStrength.color}`}
+                  style={{ width: `${(passwordStrength.score / 6) * 100}%` }}
+                ></div>
+              </div>
+            </div>
+          )}
+          <button type="submit" className="w-full btn-primary">
             Register
           </button>
         </form>

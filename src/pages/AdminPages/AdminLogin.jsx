@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import toast, { Toaster } from 'react-hot-toast';
+import Swal from 'sweetalert2';
 import InputField from '../../components/InputField';
 import { loginUser } from '../../services/api';
 
@@ -41,7 +42,7 @@ const AdminLogin = () => {
       const base64Url = token.split('.')[1];
       const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
       const payload = JSON.parse(atob(base64));
-      const role = payload.role; // Assuming the role is stored in the JWT payload as "role"
+      const role = payload.role;
 
       localStorage.setItem('role', role);
 
@@ -52,8 +53,14 @@ const AdminLogin = () => {
         return;
       }
 
-      toast.success('Login successful!');
-      navigate('/admin'); // Redirect to Admin Dashboard
+      Swal.fire({
+        position: "top-end",
+        icon: "success",
+        title: "Login successful!",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      navigate('/admin');
     } catch (error) {
       toast.error(error.response?.data || 'Login failed');
     }
@@ -82,10 +89,7 @@ const AdminLogin = () => {
             onChange={handleChange}
             error={errors.password}
           />
-          <button
-            type="submit"
-            className="w-full btn-primary"
-          >
+          <button type="submit" className="w-full btn-primary">
             Login
           </button>
         </form>
