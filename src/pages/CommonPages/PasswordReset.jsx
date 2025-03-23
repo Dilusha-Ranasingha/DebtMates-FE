@@ -2,8 +2,10 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import toast, { Toaster } from 'react-hot-toast';
+import Swal from 'sweetalert2';
 import InputField from '../../components/InputField';
 import { requestPasswordReset, confirmPasswordReset } from '../../services/api';
+import evaluatePasswordStrength from '../../utils/passwordStrength';
 
 const PasswordReset = () => {
   const navigate = useNavigate();
@@ -12,6 +14,18 @@ const PasswordReset = () => {
   const [otp, setOtp] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [error, setError] = useState('');
+  const [passwordStrength, setPasswordStrength] = useState({
+    strength: '',
+    color: '',
+    score: 0,
+  });
+
+  const handleNewPasswordChange = (e) => {
+    const value = e.target.value;
+    setNewPassword(value);
+    const strength = evaluatePasswordStrength(value);
+    setPasswordStrength(strength);
+  };
 
   const handleRequestSubmit = async (e) => {
     e.preventDefault();
@@ -26,8 +40,14 @@ const PasswordReset = () => {
 
     try {
       await requestPasswordReset({ email });
-      toast.success('OTP sent to your email. Please check your inbox.');
-      setStep('confirm'); // Move to the confirm step
+      Swal.fire({
+        position: "top-end",
+        icon: "success",
+        title: "OTP sent to your email. Please check your inbox.",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      setStep('confirm');
       setError('');
     } catch (error) {
       toast.error(error.response?.data || 'Failed to send OTP');
@@ -44,10 +64,21 @@ const PasswordReset = () => {
       setError('New password is required');
       return;
     }
+    const strength = evaluatePasswordStrength(newPassword);
+    if (strength.score < 3) {
+      setError('New password must be at least Medium strength');
+      return;
+    }
 
     try {
       await confirmPasswordReset({ email, otp, newPassword });
-      toast.success('Password reset successfully. Please login with your new password.');
+      Swal.fire({
+        position: "top-end",
+        icon: "success",
+        title: "Password reset successfully. Please login with your new password.",
+        showConfirmButton: false,
+        timer: 1500,
+      });
       navigate('/user-login');
     } catch (error) {
       toast.error(error.response?.data || 'Failed to reset password');
@@ -71,10 +102,7 @@ const PasswordReset = () => {
               onChange={(e) => setEmail(e.target.value)}
               error={error}
             />
-            <button
-              type="submit"
-              className="w-full btn-primary"
-            >
+            <button type="submit" className="w-full btn-primary">
               Send OTP
             </button>
           </form>
@@ -102,13 +130,23 @@ const PasswordReset = () => {
               type="password"
               name="newPassword"
               value={newPassword}
-              onChange={(e) => setNewPassword(e.target.value)}
+              onChange={handleNewPasswordChange}
               error={error}
             />
-            <button
-              type="submit"
-              className="w-full btn-primary"
-            >
+            {newPassword && (
+              <div className="mb-4">
+                <div className="text-sm text-gray-700">
+                  Password Strength: <span className={`font-bold ${passwordStrength.color.replace('bg-', 'text-')}`}>{passwordStrength.strength}</span>
+                </div>
+                <div className="w-full bg-gray-200 rounded-full h-2.5 mt-1">
+                  <div
+                    className={`h-2.5 rounded-full ${passwordStrength.color}`}
+                    style={{ width: `${(passwordStrength.score / 6) * 100}%` }}
+                  ></div>
+                </div>
+              </div>
+            )}
+            <button type="submit" className="w-full btn-primary">
               Reset Password
             </button>
           </form>
