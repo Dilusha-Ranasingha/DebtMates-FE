@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import toast, { Toaster } from 'react-hot-toast';
+import Swal from 'sweetalert2';
 import { getAllUsers, getAllAdmins, deleteUser } from '../../services/api';
 import Dialog from '../../components/Dialog';
 
@@ -68,7 +69,13 @@ const AdminDashboard = () => {
     setLoading(true);
     try {
       await deleteUser(deleteDialog.userId);
-      toast.success('User deleted successfully');
+      Swal.fire({
+        position: "top-end",
+        icon: "success",
+        title: "User deleted successfully",
+        showConfirmButton: false,
+        timer: 1500
+      });
       if (tab === 'users') {
         fetchUsers();
       } else {

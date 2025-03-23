@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import toast, { Toaster } from 'react-hot-toast';
+import Swal from 'sweetalert2';
 import InputField from '../../components/InputField';
 import { getUserById, updateUser } from '../../services/api';
 
@@ -69,7 +70,14 @@ const EditUser = () => {
     setLoading(true);
     try {
       await updateUser(id, formData);
-      toast.success('User updated successfully');
+      // toast.success('User updated successfully');
+      Swal.fire({
+        position: "top-end",
+        icon: "success",
+        title: "User updated successfully",
+        showConfirmButton: false,
+        timer: 1500
+      });
       navigate('/admin');
     } catch (error) {
       toast.error(error.response?.data || 'Failed to update user');
@@ -133,7 +141,7 @@ const EditUser = () => {
           </form>
         )}
       </div>
-      <Toaster />
+      
     </div>
   );
 };

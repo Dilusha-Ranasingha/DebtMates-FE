@@ -1,15 +1,33 @@
 // src/components/Navbar.jsx
 import { Link, useNavigate } from 'react-router-dom';
+import toast, { Toaster } from 'react-hot-toast';
+import { logout } from '../services/api'; // Import the logout API function
 
 const Navbar = () => {
   const navigate = useNavigate();
   const token = localStorage.getItem('token');
-  const isAdmin = localStorage.getItem('role') === 'ADMIN';
+  const role = localStorage.getItem('role');
+  const isAdmin = role === 'ADMIN';
 
-  const handleLogout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('role');
-    navigate('/user-login');
+  const handleLogout = async () => {
+    try {
+      // Call the backend logout endpoint to invalidate the token
+      await logout();
+      toast.success('Logged out successfully');
+    } catch (error) {
+      toast.error(error.response?.data || 'Failed to logout');
+    } finally {
+      // Clear localStorage
+      localStorage.removeItem('token');
+      localStorage.removeItem('role');
+
+      // Redirect based on role
+      if (isAdmin) {
+        navigate('/admin-login');
+      } else {
+        navigate('/user-login');
+      }
+    }
   };
 
   return (
@@ -49,6 +67,7 @@ const Navbar = () => {
           )}
         </div>
       </div>
+      
     </nav>
   );
 };
