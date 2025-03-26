@@ -22,7 +22,7 @@ const useGroup = () => {
   const createNewGroup = async (data) => {
     setLoading(true);
     try {
-      const response = await createGroup(data);     // createGroup is a function tha call the '/groups' endpoint with the data passed as argument to create the group
+      const response = await createGroup(data);
       setGroups([...groups, response.data]);
       return response.data;
     } catch (error) {
@@ -37,7 +37,7 @@ const useGroup = () => {
     setLoading(true);
     try {
       const response = await updateGroup(groupId, data);
-      setGroups(groups.map((g) => (g.id === groupId ? response.data : g)));
+      setGroups(groups.map((g) => (g.groupId === groupId ? response.data : g)));
       return response.data;
     } catch (error) {
       toast.error(error.response?.data || 'Failed to update group');

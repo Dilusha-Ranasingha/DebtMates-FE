@@ -7,7 +7,7 @@ import validateForm from '../../utils/validateForm';
 
 const CreateGroup = () => {
   const navigate = useNavigate();
-  const { createNewGroup } = useGroup();     // get the createNewGroup function from the useGroup hook. that function is used to create a new group
+  const { createNewGroup } = useGroup();
   const [formData, setFormData] = useState({
     groupName: '',
     groupDescription: '',
@@ -28,10 +28,12 @@ const CreateGroup = () => {
     }
 
     try {
-      await createNewGroup(formData);         // call the createNewGroup function with the formData as an argument
+      console.log('Form Data are coming:', formData);
+      const newGroup = await createNewGroup(formData);
+      console.log('New Group Response:', newGroup);
       navigate('/dashboard');
     } catch (error) {
-      // Error handled in useGroup hook
+      console.error('Error creating group:', error);
     }
   };
 

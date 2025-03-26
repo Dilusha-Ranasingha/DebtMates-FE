@@ -35,12 +35,12 @@ export const requestPasswordReset = (data) => api.post('/auth/password-reset/req
 export const confirmPasswordReset = (data) => api.post('/auth/password-reset/confirm', data);
 export const logout = () => api.post('/auth/logout');
 
-// New group/debt functions
+// Group and debt functions
 export const getUserGroups = () => api.get('/groups/me');
 export const createGroup = (data) => api.post('/groups', data);
 export const updateGroup = (groupId, data) => api.put(`/groups/${groupId}`, data);
 export const getGroupDebts = (groupId) => api.get(`/groups/${groupId}/debts`);
 export const addGroupMembers = (groupId, userIds) => api.post(`/groups/${groupId}/members`, { userIds });
 export const recordDebt = (groupId, data) => api.post(`/groups/${groupId}/debts`, data);
-export const getGroupMembers = (groupId) => api.get(`/groups/${groupId}/members`); // Assumes backend support
+export const getGroupMembers = (groupId) => api.get(`/groups/${groupId}/members`);
 export const searchUsers = (query) => api.get(`/users/search?username=${query}`);
