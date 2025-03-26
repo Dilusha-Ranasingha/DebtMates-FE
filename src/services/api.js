@@ -10,10 +10,11 @@ const api = axios.create({
   },
 });
 
+//This is ensure the Frontend Sends the Token to the Backend
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem('token');
   if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
+    config.headers.Authorization = `Bearer ${token}`;      //This token stored in the local storage
   }
   return config;
 });
@@ -43,4 +44,4 @@ export const getGroupDebts = (groupId) => api.get(`/groups/${groupId}/debts`);
 export const addGroupMembers = (groupId, userIds) => api.post(`/groups/${groupId}/members`, { userIds });
 export const recordDebt = (groupId, data) => api.post(`/groups/${groupId}/debts`, data);
 export const getGroupMembers = (groupId) => api.get(`/groups/${groupId}/members`);
-export const searchUsers = (query) => api.get(`/users/search?username=${query}`);
+export const searchUsers = (query, searchBy = 'username') => api.get(`/user/search?${searchBy}=${query}`);
