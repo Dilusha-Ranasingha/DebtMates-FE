@@ -36,8 +36,8 @@ const GroupCard = ({ group }) => {
       ) : (
         <p className="text-sm text-gray-500">Total Debt: ${totalDebt.toFixed(2)}</p>
       )}
-      <div className="mt-4 space-x-2">
-        <Link to={`/groups/${groupId}`} className="btn-primary">
+      <div className="mt-4 flex flex-wrap gap-2">
+        <Link to={`/groups/${groupId}/debts`} className="btn-primary">
           View Details
         </Link>
         {isCreator && (
@@ -49,7 +49,7 @@ const GroupCard = ({ group }) => {
               Add Members
             </Link>
             <Link to={`/groups/${groupId}/record-debt`} className="btn-primary">
-              Record Debt
+              Record Debt 
             </Link>
           </>
         )}

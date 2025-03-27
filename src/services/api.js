@@ -40,8 +40,8 @@ export const logout = () => api.post('/auth/logout');
 export const getUserGroups = () => api.get('/groups/me');
 export const createGroup = (data) => api.post('/groups', data);
 export const updateGroup = (groupId, data) => api.put(`/groups/${groupId}`, data);
-export const getGroupDebts = (groupId) => api.get(`/groups/${groupId}/debts`);
+export const getGroupDebts = (groupId) => api.get(`/groups/${groupId}/debts`);    //This is to get the debts form the backend
 export const addGroupMembers = (groupId, userIds) => api.post(`/groups/${groupId}/members`, { userIds });
-export const recordDebt = (groupId, data) => api.post(`/groups/${groupId}/debts`, data);
+export const recordDebt = (groupId, data) => api.post(`/groups/${groupId}/debts`, data);     //This is record the debt to the backend
 export const getGroupMembers = (groupId) => api.get(`/groups/${groupId}/members`);
 export const searchUsers = (query, searchBy = 'username') => api.get(`/user/search?${searchBy}=${query}`);
