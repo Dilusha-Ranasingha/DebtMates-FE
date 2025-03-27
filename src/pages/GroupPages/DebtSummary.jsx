@@ -30,20 +30,45 @@ const DebtSummary = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 p-6">
+    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-gray-100 p-8">
       <div className="container mx-auto">
-        <h2 className="text-3xl font-bold text-blue-700 mb-6">Debt Summary</h2>
+        <h2 className="text-4xl font-extrabold text-blue-800 mb-8 text-center">
+          Debt Summary
+        </h2>
         {debts.length === 0 ? (
-          <p className="text-gray-600">No debts found for this group.</p>
+          <p className="text-lg text-gray-700 text-center">
+            No debts found for this group.
+          </p>
         ) : (
-          <ul className="space-y-4">
+          <ul className="space-y-6">
             {debts.map((debt, index) => (
-              <li key={index} className="p-4 bg-white shadow rounded">
-                <p><strong>Member Name:</strong> {debt.memberName}</p>
-                <p><strong>Contributed:</strong> ${debt.contributed}</p>
-                <p><strong>Expected:</strong> ${debt.expected}</p>
-                <p><strong>To Whom to Pay:</strong> {debt.toWhoPay || 'N/A'}</p>
-                <p><strong>Amount:</strong> ${debt.amountToPay || 'N/A'}</p>
+              <li
+                key={index}
+                className="p-6 bg-white shadow-lg rounded-lg border border-gray-200 hover:shadow-xl transition-shadow duration-300"
+              >
+                <p className="text-lg font-semibold text-gray-800">
+                  <strong>Member Name:</strong> {debt.memberName}
+                </p>
+                <p className="text-gray-700">
+                  <strong>Contributed:</strong>{" "}
+                  <span className="text-green-600">${debt.contributed}</span>
+                </p>
+                <p className="text-gray-700">
+                  <strong>Expected:</strong>{" "}
+                  <span className="text-red-600">${debt.expected}</span>
+                </p>
+                <p className="text-gray-700">
+                  <strong>To Whom to Pay:</strong>{" "}
+                  <span className="text-blue-600">
+                    {debt.toWhoPay || "N/A"}
+                  </span>
+                </p>
+                <p className="text-gray-700">
+                  <strong>Amount:</strong>{" "}
+                  <span className="text-purple-600">
+                    ${debt.amountToPay || "N/A"}
+                  </span>
+                </p>
               </li>
             ))}
           </ul>
