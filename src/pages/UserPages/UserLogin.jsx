@@ -106,7 +106,6 @@ const UserLogin = () => {
           </a>
         </p>
       </div>
-      <Toaster />
     </div>
   );
 };
