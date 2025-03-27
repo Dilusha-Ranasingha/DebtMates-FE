@@ -21,7 +21,7 @@ const Home = () => {
         <p className="text-lg text-gray-600 mb-6">
           Manage your debts and finances with ease.
         </p>
-        {!token && (
+        {/* {!token && (
           <div className="space-x-4">
             <a
               href="/user-login"
@@ -36,7 +36,7 @@ const Home = () => {
               Register
             </a>
           </div>
-        )}
+        )} */}
       </div>
     </div>
   );
