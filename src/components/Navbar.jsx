@@ -32,7 +32,13 @@ const Navbar = () => {
           {token ? (
             <>
               <Link to="/dashboard" className="text-white hover:text-blue-200">
-                Dashboard
+                Debts
+              </Link>
+              <Link to="/#" className="text-white hover:text-blue-200">
+                Rotational Savings
+              </Link>
+              <Link to="/#" className="text-white hover:text-blue-200">
+                Personal Savings
               </Link>
               <Link to="/profile" className="text-white hover:text-blue-200">
                 Profile

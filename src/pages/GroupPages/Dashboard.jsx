@@ -12,7 +12,7 @@ const Dashboard = () => {
     <div className="min-h-screen bg-gray-100 p-6">
       <div className="container mx-auto">
         <div className="flex justify-between items-center mb-6">
-          <h2 className="text-3xl font-bold text-blue-700">Dashboard</h2>
+          <h2 className="text-3xl font-bold text-blue-700">Manage Your Debts</h2>
           <button
             onClick={() => navigate('/groups/create')}
             className="btn-primary"
