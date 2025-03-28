@@ -9,7 +9,7 @@ import { loginUser } from '../../services/api';
 const UserLogin = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    username: '',
+    email: '', // Changed from username to email
     password: '',
   });
   const [errors, setErrors] = useState({});
@@ -20,7 +20,8 @@ const UserLogin = () => {
 
   const validate = () => {
     const newErrors = {};
-    if (!formData.username) newErrors.username = 'Username is required';
+    if (!formData.email) newErrors.email = 'Email is required'; // Changed from username to email
+    else if (!/\S+@\S+\.\S+/.test(formData.email)) newErrors.email = 'Email is invalid';
     if (!formData.password) newErrors.password = 'Password is required';
     return newErrors;
   };
@@ -34,7 +35,12 @@ const UserLogin = () => {
     }
 
     try {
-      const response = await loginUser(formData);
+      // Map email to username field for the API request
+      const loginData = {
+        username: formData.email, // Backend expects "username" but will check both username and email
+        password: formData.password,
+      };
+      const response = await loginUser(loginData);
       const token = response.data;
       localStorage.setItem('token', token);
 
@@ -74,12 +80,12 @@ const UserLogin = () => {
         </h2>
         <form onSubmit={handleSubmit}>
           <InputField
-            label="Username"
-            type="text"
-            name="username"
-            value={formData.username}
+            label="Email" // Changed from Username to Email
+            type="email"
+            name="email" // Changed from username to email
+            value={formData.email}
             onChange={handleChange}
-            error={errors.username}
+            error={errors.email}
           />
           <InputField
             label="Password"
