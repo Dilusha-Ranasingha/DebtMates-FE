@@ -77,11 +77,22 @@ const AdminRegister = () => {
   };
 
   return (
+    <>
+
+    <div className="text-left mb-4">
+      <button onClick={() => navigate(-1)} className="text-blue-600 hover:underline">
+      <span className="mr-1">&laquo;</span> Back
+      </button>
+    </div>
+    
     <div className="min-h-screen bg-gray-100 flex items-center justify-center">
+      
       <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
         <h2 className="text-2xl font-bold text-blue-700 mb-6 text-center">
           Admin Register
         </h2>
+
+
         <form onSubmit={handleSubmit}>
           <InputField
             label="Username"
@@ -131,8 +142,9 @@ const AdminRegister = () => {
           </a>
         </p>
       </div>
-      <Toaster />
+      
     </div>
+    </>
   );
 };
 
