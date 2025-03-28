@@ -20,6 +20,7 @@ import AddMembers from './pages/GroupPages/AddMembers';
 import RecordDebt from './pages/GroupPages/RecordDebt';
 import Home from './pages/Home';
 import DebtSummary from './pages/GroupPages/DebtSummary';
+import RotationalPage from './pages/RotationalPlanPages/RotationalPage';
 
 function App() {
   return (
@@ -43,6 +44,7 @@ function App() {
           <Route path="/groups/:groupId/edit" element={<ProtectedRoute><EditGroup /></ProtectedRoute>} />
           <Route path="/groups/:groupId/add-members" element={<ProtectedRoute><AddMembers /></ProtectedRoute>} />
           <Route path="/groups/:groupId/record-debt" element={<ProtectedRoute><RecordDebt /></ProtectedRoute>} />
+          <Route path="/rotational-page" element={<ProtectedRoute><RotationalPage /></ProtectedRoute>} />
           <Route path="*" element={<NotFound />} />
         </Routes>
         <Footer />
