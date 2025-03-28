@@ -4,7 +4,7 @@ import Dialog from '../../components/Dialog';
 import { useState } from 'react';
 
 const RotationalGroupCard = ({ group, onDelete }) => {
-  const { groupId, groupName, groupDescription, numMembers, creator } = group;
+  const { groupId, groupName, groupDescription, numMembers, isCreator } = group;
   const [deleteDialog, setDeleteDialog] = useState(false);
 
   const handleDelete = () => {
@@ -22,9 +22,9 @@ const RotationalGroupCard = ({ group, onDelete }) => {
         <Link to={`/rotational/${groupId}/payments`} className="btn-primary">
           View Rotational Payments
         </Link>
-        {creator && (
+        {isCreator && (
           <>
-            <Link to={`/rotational/groups/${groupId}`} className="btn-secondary" >
+            <Link to={`/rotational/groups/${groupId}`} className="btn-secondary">
               Edit Group
             </Link>
             <button

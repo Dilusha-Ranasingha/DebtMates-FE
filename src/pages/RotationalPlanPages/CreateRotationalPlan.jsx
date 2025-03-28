@@ -1,64 +1,37 @@
 // src/pages/RotationalPlanPages/CreateRotationalPlan.jsx
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import useRotational from '../../hooks/useRotational';
-import { getRotationalGroupMembers, getRotationalGroups } from '../../services/api'; // Updated import
 import InputField from '../../components/InputField';
 import toast from 'react-hot-toast';
 
 const CreateRotationalPlan = () => {
   const { groupId } = useParams();
   const navigate = useNavigate();
-  const { createPlan } = useRotational();
-  const [members, setMembers] = useState([]);
-  const [planData, setPlanData] = useState([]);
-  const [creator, setIsCreator] = useState(false);
-  const [loading, setLoading] = useState(true);
-  const [numMembers, setNumMembers] = useState(0);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        // Check if the user is the creator
-        const groupsResponse = await getRotationalGroups();
-        console.log('Groups Response:', groupsResponse.data);
-        const group = groupsResponse.data.find((g) => g.groupId === parseInt(groupId));
-        if (!group) {
-          toast.error('Group not found');
-          navigate('/rotational-page');
-          return;
-        }
-        if (!group.creator) {
-          toast.error('You are not authorized to create a plan for this group');
-          navigate(`rotational/groups/${groupId}/plan`);
-          return;
-        }
-        setIsCreator(true);
-        setNumMembers(group.numMembers);
+  // Dummy data
+  const dummyGroup = {
+    groupId: parseInt(groupId),
+    groupName: 'Updated Friends Savings',
+    numMembers: 5,
+    isCreator: true,
+  };
 
-        // Fetch group members
-        const membersResponse = await getRotationalGroupMembers(groupId); // Updated to use getRotationalGroupMembers
-        console.log('Members Response:', membersResponse.data);
-        setMembers(membersResponse.data);
+  const dummyMembers = [
+    { id: 1, username: 'Member 1' },
+    { id: 2, username: 'Member 2' },
+    { id: 3, username: 'Member 3' },
+    { id: 4, username: 'Member 4' },
+    { id: 5, username: 'Member 5' },
+  ];
 
-        // Initialize plan data based on numMembers
-        const initialPlan = Array.from({ length: group.numMembers }, (_, index) => ({
-          monthNumber: index + 1,
-          recipientId: '',
-          amount: '',
-        }));
-        setPlanData(initialPlan);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-        console.error('Error response:', error.response?.data); // Log the error response
-        toast.error('Failed to fetch group details: ' + (error.response?.data?.message || error.message));
-        navigate('/rotational-page');
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchData();
-  }, [groupId, navigate]);
+  const [members] = useState(dummyMembers);
+  const [planData, setPlanData] = useState(
+    Array.from({ length: dummyGroup.numMembers }, (_, index) => ({
+      monthNumber: index + 1,
+      recipientId: '',
+      amount: '',
+    }))
+  );
 
   const handlePlanChange = (index, field, value) => {
     const updatedPlan = [...planData];
@@ -66,7 +39,7 @@ const CreateRotationalPlan = () => {
     setPlanData(updatedPlan);
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     // Validate the plan
     for (let i = 0; i < planData.length; i++) {
@@ -81,18 +54,16 @@ const CreateRotationalPlan = () => {
       }
     }
 
-    try {
-      await createPlan(groupId, planData);
-      toast.success('Plan created successfully');
-      navigate(`/rotational/${groupId}/payments`);
-    } catch (error) {
-      toast.error('Error creating plan: ' + (error.response?.data?.message || error.message));
-      console.error('Error creating plan:', error);
-    }
+    // Simulate successful plan creation
+    toast.success('Plan created successfully');
+    navigate(`/rotational/${groupId}/payments`);
   };
 
-  if (loading) return <div>Loading...</div>;
-  if (!creator) return null;
+  if (!dummyGroup.isCreator) {
+    toast.error('You are not authorized to create a plan for this group');
+    navigate(`/rotational/${groupId}/payments`);
+    return null;
+  }
 
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center">
