@@ -1,43 +1,43 @@
-import React from 'react'
+// src/pages/RotationalPlanPages/RotationalPage.jsx
+import { useNavigate } from 'react-router-dom';
+import useRotational from '../../hooks/useRotational';
+import LoadingSpinner from '../../components/LoadingSpinner';
+import RotationalGroupCard from './RotationalGroupCard';
 
 const RotationalPage = () => {
-return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
-        <h1 className="text-4xl font-bold text-blue-600 mb-4">Welcome to Financial Rotational Details</h1>
-        <p className="text-lg text-gray-700 mb-6 text-center">
-            Explore and manage your financial rotational plans with ease and precision.
-        </p>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-4xl">
-            <div className="p-6 bg-white rounded-lg shadow-md">
-                <h2 className="text-2xl font-semibold text-blue-600 mb-2">Plan Overview</h2>
-                <p className="text-gray-700">
-                    Get a detailed overview of your current rotational plans and their progress.
-                </p>
-            </div>
-            <div className="p-6 bg-white rounded-lg shadow-md">
-                <h2 className="text-2xl font-semibold text-blue-600 mb-2">Financial Insights</h2>
-                <p className="text-gray-700">
-                    Analyze your financial data and gain insights to optimize your plans.
-                </p>
-            </div>
-            <div className="p-6 bg-white rounded-lg shadow-md">
-                <h2 className="text-2xl font-semibold text-blue-600 mb-2">Action Items</h2>
-                <p className="text-gray-700">
-                    Stay on top of your tasks with a list of actionable items for your plans.
-                </p>
-            </div>
-            <div className="p-6 bg-white rounded-lg shadow-md">
-                <h2 className="text-2xl font-semibold text-blue-600 mb-2">Support</h2>
-                <p className="text-gray-700">
-                    Reach out to our support team for assistance with your rotational plans.
-                </p>
-            </div>
-        </div>
-        <button className="mt-6 px-6 py-3 bg-blue-600 text-white rounded-lg shadow-md hover:bg-blue-700 transition">
-            Get Started
-        </button>
-    </div>
-)
-}
+  const navigate = useNavigate();
+  const { groups, loading, deleteGroup } = useRotational();
 
-export default RotationalPage
+  return (
+    <div className="min-h-screen bg-gray-100 p-6">
+      <div className="container mx-auto">
+        <div className="flex justify-between items-center mb-6">
+          <h2 className="text-3xl font-bold text-blue-700">Rotational Savings Dashboard</h2>
+          <button
+            onClick={() => navigate('/rotational/create')}
+            className="btn-primary"
+          >
+            Create Rotational Group
+          </button>
+        </div>
+        {loading ? (
+          <LoadingSpinner />
+        ) : groups.length === 0 ? (
+          <p className="text-gray-600">No rotational groups found. Create one to start!</p>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {groups.map((group) => (
+              <RotationalGroupCard
+                key={group.groupId}
+                group={group}
+                onDelete={deleteGroup}
+              />
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default RotationalPage;
