@@ -10,11 +10,11 @@ const api = axios.create({
   },
 });
 
-//This is ensure the Frontend Sends the Token to the Backend
+// Ensure the frontend sends the token to the backend
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem('token');
   if (token) {
-    config.headers.Authorization = `Bearer ${token}`;      //This token stored in the local storage
+    config.headers.Authorization = `Bearer ${token}`;
   }
   return config;
 });
@@ -40,8 +40,22 @@ export const logout = () => api.post('/auth/logout');
 export const getUserGroups = () => api.get('/groups/me');
 export const createGroup = (data) => api.post('/groups', data);
 export const updateGroup = (groupId, data) => api.put(`/groups/${groupId}`, data);
-export const getGroupDebts = (groupId) => api.get(`/groups/${groupId}/debts`);    //This is to get the debts form the backend
+export const getGroupDebts = (groupId) => api.get(`/groups/${groupId}/debts`);
 export const addGroupMembers = (groupId, userIds) => api.post(`/groups/${groupId}/members`, { userIds });
-export const recordDebt = (groupId, data) => api.post(`/groups/${groupId}/debts`, data);     //This is record the debt to the backend
+export const recordDebt = (groupId, data) => api.post(`/groups/${groupId}/debts`, data);
 export const getGroupMembers = (groupId) => api.get(`/groups/${groupId}/members`);
 export const searchUsers = (query, searchBy = 'username') => api.get(`/user/search?${searchBy}=${query}`);
+
+// Rotational savings functions
+export const getRotationalGroups = () => api.get('/rotational/groups');
+export const createRotationalGroup = (data) => api.post('/rotational/groups', data);
+export const updateRotationalGroup = (groupId, data) => api.put(`/rotational/groups/${groupId}`, data);
+export const addRotationalMembers = (groupId, memberIds) => api.post(`/rotational/groups/${groupId}/members`, { memberIds });
+export const createRotationalPlan = (groupId, data) => api.post(`/rotational/groups/${groupId}/plan`, data);
+export const getRotationalPayments = (groupId) => api.get(`/rotational/groups/${groupId}/payments`);
+export const uploadPaymentSlip = (paymentId, slipData) => api.put(`/rotational/payments/${paymentId}/slip`, slipData, {
+  headers: { 'Content-Type': 'application/octet-stream' },
+});
+export const getPaymentSlip = (paymentId) => api.get(`/rotational/payments/${paymentId}/slip`, { responseType: 'blob' });
+export const deleteRotationalGroup = (groupId) => api.delete(`/rotational/groups/${groupId}`);
+export const getRotationalGroupMembers = (groupId) => api.get(`/rotational/groups/${groupId}/members`);
