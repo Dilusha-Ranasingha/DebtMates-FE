@@ -10,14 +10,16 @@ const api = axios.create({
   },
 });
 
+//This is ensure the Frontend Sends the Token to the Backend
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem('token');
   if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
+    config.headers.Authorization = `Bearer ${token}`;      //This token stored in the local storage
   }
   return config;
 });
 
+// Existing auth/user functions
 export const loginUser = (data) => api.post('/auth/login', data);
 export const registerUser = (data) => api.post('/auth/register', data, {
   headers: { Authorization: localStorage.getItem('token') ? `Bearer ${localStorage.getItem('token')}` : '' },
@@ -33,3 +35,4 @@ export const deleteUser = (id) => api.delete(`/admin/users/${id}`);
 export const requestPasswordReset = (data) => api.post('/auth/password-reset/request', data);
 export const confirmPasswordReset = (data) => api.post('/auth/password-reset/confirm', data);
 export const logout = () => api.post('/auth/logout');
+
