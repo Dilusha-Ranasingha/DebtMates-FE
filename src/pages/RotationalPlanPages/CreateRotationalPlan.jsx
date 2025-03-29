@@ -80,7 +80,9 @@ const CreateRotationalPlan = () => {
                 <select
                   value={plan.recipientId}
                   onChange={(e) => handlePlanChange(index, 'recipientId', e.target.value)}
-                  className="w-full p-2 border rounded-lg"
+                  className={`w-full p-2 border rounded-lg ${
+                    !plan.recipientId ? 'border-red-500' : ''
+                  }`}
                 >
                   <option value="">Select Recipient</option>
                   {members.map((member) => (
@@ -89,6 +91,11 @@ const CreateRotationalPlan = () => {
                     </option>
                   ))}
                 </select>
+                {!plan.recipientId && (
+                  <p className="text-red-500 text-sm mt-1">
+                    Please select a recipient for this month.
+                  </p>
+                )}
               </div>
               <InputField
                 label="Amount"
@@ -96,7 +103,13 @@ const CreateRotationalPlan = () => {
                 name={`amount-${index}`}
                 value={plan.amount}
                 onChange={(e) => handlePlanChange(index, 'amount', e.target.value)}
+                className={!plan.amount || parseFloat(plan.amount) <= 0 ? 'border-red-500' : ''}
               />
+              {(!plan.amount || parseFloat(plan.amount) <= 0) && (
+                <p className="text-red-500 text-sm mt-1">
+                  Please enter a valid positive amount.
+                </p>
+              )}
             </div>
           ))}
           <button type="submit" className="w-full btn-primary">
