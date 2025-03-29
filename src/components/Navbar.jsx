@@ -34,7 +34,7 @@ const Navbar = () => {
               <Link to="/dashboard" className="text-white hover:text-blue-200">
                 Debts
               </Link>
-              <Link to="/#" className="text-white hover:text-blue-200">
+              <Link to="/rotational-page" className="text-white hover:text-blue-200">
                 Rotational Savings
               </Link>
               <Link to="/#" className="text-white hover:text-blue-200">

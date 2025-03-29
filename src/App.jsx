@@ -20,6 +20,13 @@ import AddMembers from './pages/GroupPages/AddMembers';
 import RecordDebt from './pages/GroupPages/RecordDebt';
 import Home from './pages/Home';
 import DebtSummary from './pages/GroupPages/DebtSummary';
+import RotationalPage from './pages/RotationalPlanPages/RotationalPage';
+import CreateRotationalGroup from './pages/RotationalPlanPages/CreateRotationalGroup';
+import EditRotationalGroup from './pages/RotationalPlanPages/EditRotationalGroup';
+import AddRotationalMembers from './pages/RotationalPlanPages/AddRotationalMembers';
+import CreateRotationalPlan from './pages/RotationalPlanPages/CreateRotationalPlan';
+import RotationalPayments from './pages/RotationalPlanPages/RotationalPayments';
+import UploadSlip from './pages/RotationalPlanPages/UploadSlip';
 
 function App() {
   return (
@@ -39,10 +46,17 @@ function App() {
           <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
           <Route path="/groups/create" element={<ProtectedRoute><CreateGroup /></ProtectedRoute>} />
           <Route path="/groups/:groupId" element={<ProtectedRoute><GroupDetails /></ProtectedRoute>} />
-          <Route path="/groups/:groupId/debts" element={<DebtSummary />} /> 
+          <Route path="/groups/:groupId/debts" element={<DebtSummary />} />
           <Route path="/groups/:groupId/edit" element={<ProtectedRoute><EditGroup /></ProtectedRoute>} />
           <Route path="/groups/:groupId/add-members" element={<ProtectedRoute><AddMembers /></ProtectedRoute>} />
           <Route path="/groups/:groupId/record-debt" element={<ProtectedRoute><RecordDebt /></ProtectedRoute>} />
+          <Route path="/rotational-page" element={<ProtectedRoute><RotationalPage /></ProtectedRoute>} />
+          <Route path="/rotational/create" element={<ProtectedRoute><CreateRotationalGroup /></ProtectedRoute>} />
+          <Route path="/rotational/groups/:groupId" element={<ProtectedRoute><EditRotationalGroup /></ProtectedRoute>} />
+          <Route path="/rotational/groups/:groupId/members" element={<ProtectedRoute><AddRotationalMembers /></ProtectedRoute>} />
+          <Route path="/rotational/groups/:groupId/plan" element={<ProtectedRoute><CreateRotationalPlan /></ProtectedRoute>} />
+          <Route path="/rotational/:groupId/payments" element={<ProtectedRoute><RotationalPayments /></ProtectedRoute>} />
+          <Route path="/rotational/payments/:paymentId/upload-slip" element={<ProtectedRoute><UploadSlip /></ProtectedRoute>} />
           <Route path="*" element={<NotFound />} />
         </Routes>
         <Footer />
