@@ -59,40 +59,51 @@ const RotationalPayments = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-100 p-6">
+    <div className="min-h-screen bg-gray-50 p-6">
       <div className="container mx-auto">
-        <h2 className="text-3xl font-bold text-blue-700 mb-6">
+        <h2 className="text-4xl font-extrabold text-blue-800 mb-8 text-center">
           Rotational Payments for Group {groupId}
         </h2>
         {dummyPayments.map((monthData) => (
-          <div key={monthData.month} className="mb-8">
-            <h3 className="text-2xl font-bold text-gray-800 mb-4">
+          <div key={monthData.month} className="mb-10">
+            <h3 className="text-2xl font-semibold text-gray-700 mb-6">
               Month {monthData.month}
             </h3>
-            <table className="w-full bg-white rounded-lg shadow-lg">
-              <thead>
-                <tr className="bg-blue-700 text-white">
-                  <th className="p-3 text-left">Month</th>
-                  <th className="p-3 text-left">Payer</th>
-                  <th className="p-3 text-left">Recipient</th>
-                  <th className="p-3 text-left">Amount</th>
-                  <th className="p-3 text-left">Status</th>
-                  <th className="p-3 text-left">Slip</th>
-                </tr>
-              </thead>
-              <tbody>
-                {monthData.payments.map((payment, index) => (
-                  <tr key={index} className="border-b">
-                    <td className="p-3">{monthData.month}</td>
-                    <td className="p-3">{payment.payer}</td>
-                    <td className="p-3">{monthData.recipient}</td>
-                    <td className="p-3">${payment.amount}</td>
-                    <td className="p-3">{payment.status}</td>
-                    <td className="p-3">{payment.slip}</td>
+            <div className="overflow-x-auto">
+              <table className="w-full bg-white rounded-lg shadow-md">
+                <thead>
+                  <tr className="bg-blue-600 text-white">
+                    <th className="p-4 text-left font-medium">Month</th>
+                    <th className="p-4 text-left font-medium">Payer</th>
+                    <th className="p-4 text-left font-medium">Recipient</th>
+                    <th className="p-4 text-left font-medium">Amount</th>
+                    <th className="p-4 text-left font-medium">Upload Slip</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {monthData.payments.map((payment, index) => (
+                    <tr
+                      key={index}
+                      className={`border-b ${
+                        index % 2 === 0 ? "bg-gray-50" : "bg-gray-100"
+                      }`}
+                    >
+                      <td className="p-4 text-gray-700">{monthData.month}</td>
+                      <td className="p-4 text-gray-700">{payment.payer}</td>
+                      <td className="p-4 text-gray-700">{monthData.recipient}</td>
+                      <td className="p-4 text-gray-700">${payment.amount}</td>
+                      <td className="p-4">
+                        <input
+                          type="file"
+                          className="border border-gray-300 p-2 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          accept="image/*"
+                        />
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         ))}
       </div>
