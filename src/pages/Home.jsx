@@ -2,6 +2,8 @@
 
 import { useEffect } from "react"
 import { useNavigate } from "react-router-dom"
+import debtImage from "../assets/debtImage.jpeg";
+
 
 const Home = () => {
   const navigate = useNavigate()
@@ -15,7 +17,7 @@ const Home = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100">
-      {/* Hero Section */}
+    
       <header className="bg-white shadow-sm">
         <div className="container mx-auto px-4 py-6 flex justify-between items-center">
           <h1 className="text-2xl font-bold text-blue-700">DebtMates</h1>
@@ -58,7 +60,7 @@ const Home = () => {
           </div>
           <div className="bg-white rounded-xl shadow-xl p-4 max-w-4xl mx-auto">
             <img
-              src="/placeholder.svg?height=400&width=800"
+              src={debtImage}
               alt="DebtMates Dashboard Preview"
               className="rounded-lg w-full"
             />
@@ -77,7 +79,7 @@ const Home = () => {
             <div className="bg-gray-50 p-6 rounded-lg">
               <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mb-4">
                 <svg
-                  xmlns="http://www.w3.org/2000/svg"
+                  xmlns=""
                   className="h-6 w-6 text-blue-600"
                   fill="none"
                   viewBox="0 0 24 24"
@@ -207,99 +209,7 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="bg-gray-800 text-gray-300 py-12">
-        <div className="container mx-auto px-4">
-          <div className="grid md:grid-cols-4 gap-8">
-            <div>
-              <h3 className="text-xl font-bold text-white mb-4">DebtMates</h3>
-              <p className="mb-4">Your partner in financial freedom.</p>
-            </div>
-
-            <div>
-              <h4 className="text-lg font-semibold text-white mb-4">Features</h4>
-              <ul className="space-y-2">
-                <li>
-                  <a href="#" className="hover:text-white">
-                    Debt Tracking
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:text-white">
-                    Payment Reminders
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:text-white">
-                    Payoff Strategies
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:text-white">
-                    Financial Reports
-                  </a>
-                </li>
-              </ul>
-            </div>
-
-            <div>
-              <h4 className="text-lg font-semibold text-white mb-4">Resources</h4>
-              <ul className="space-y-2">
-                <li>
-                  <a href="#" className="hover:text-white">
-                    Blog
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:text-white">
-                    Guides
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:text-white">
-                    FAQ
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:text-white">
-                    Support
-                  </a>
-                </li>
-              </ul>
-            </div>
-
-            <div>
-              <h4 className="text-lg font-semibold text-white mb-4">Company</h4>
-              <ul className="space-y-2">
-                <li>
-                  <a href="#" className="hover:text-white">
-                    About Us
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:text-white">
-                    Careers
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:text-white">
-                    Privacy Policy
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:text-white">
-                    Terms of Service
-                  </a>
-                </li>
-              </ul>
-            </div>
-          </div>
-
-          <div className="border-t border-gray-700 mt-8 pt-8 text-center">
-            <p>&copy; {new Date().getFullYear()} DebtMates. All rights reserved.</p>
-          </div>
-        </div>
-      </footer>
+      
     </div>
   )
 }
