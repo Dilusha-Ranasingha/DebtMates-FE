@@ -1,4 +1,3 @@
-// src/hooks/useRotational.js
 import { useState, useEffect } from 'react';
 import {
   getRotationalGroups,
@@ -14,128 +13,114 @@ import toast from 'react-hot-toast';
 
 const useRotational = () => {
   const [groups, setGroups] = useState([]);
+  const [payments, setPayments] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  const fetchGroups = async () => {
-    setLoading(true);
-    try {
-      const response = await getRotationalGroups();
-      setGroups(response.data);
-    } catch (error) {
-      toast.error('Failed to fetch rotational groups');
-    } finally {
-      setLoading(false);
-    }
-  };
+  useEffect(() => {
+    const fetchGroups = async () => {
+      setLoading(true);
+      try {
+        const response = await getRotationalGroups();
+        setGroups(response.data);
+      } catch (error) {
+        console.error('Error fetching groups:', error);
+        toast.error('Failed to fetch groups');
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchGroups();
+  }, []);
 
-  const createNewGroup = async (data) => {
-    setLoading(true);
+  const createNewGroup = async (groupData) => {
     try {
-      const response = await createRotationalGroup(data);
+      const response = await createRotationalGroup(groupData);
       setGroups([...groups, response.data]);
       toast.success('Group created successfully');
-      return response.data;
     } catch (error) {
-      toast.error(error.response?.data || 'Failed to create group');
+      console.error('Error creating group:', error);
+      toast.error('Failed to create group');
       throw error;
-    } finally {
-      setLoading(false);
     }
   };
 
-  const updateExistingGroup = async (groupId, data) => {
-    setLoading(true);
+  const updateExistingGroup = async (groupId, groupData) => {
     try {
-      const response = await updateRotationalGroup(groupId, data);
-      setGroups(groups.map((g) => (g.groupId === groupId ? response.data : g)));
+      const response = await updateRotationalGroup(groupId, groupData);
+      setGroups(groups.map((group) => (group.groupId === groupId ? response.data : group)));
       toast.success('Group updated successfully');
-      return response.data;
     } catch (error) {
-      toast.error(error.response?.data || 'Failed to update group');
+      console.error('Error updating group:', error);
+      toast.error('Failed to update group');
       throw error;
-    } finally {
-      setLoading(false);
     }
   };
 
   const addMembers = async (groupId, memberIds) => {
-    setLoading(true);
     try {
       const response = await addRotationalMembers(groupId, memberIds);
-      setGroups(groups.map((g) => (g.groupId === groupId ? response.data : g)));
+      setGroups(groups.map((group) => (group.groupId === groupId ? response.data : group)));
       toast.success('Members added successfully');
-      return response.data;
     } catch (error) {
-      toast.error(error.response?.data || 'Failed to add members');
+      console.error('Error adding members:', error);
+      toast.error('Failed to add members');
       throw error;
-    } finally {
-      setLoading(false);
     }
   };
 
-  const createPlan = async (groupId, data) => {
-    setLoading(true);
+  const createPlan = async (groupId, planData) => {
     try {
-      const response = await createRotationalPlan(groupId, data);
+      const response = await createRotationalPlan(groupId, planData);
       toast.success('Plan created successfully');
       return response.data;
     } catch (error) {
-      toast.error(error.response?.data || 'Failed to create plan');
+      console.error('Error creating plan:', error);
+      toast.error('Failed to create plan');
       throw error;
-    } finally {
-      setLoading(false);
     }
   };
 
   const fetchPayments = async (groupId) => {
-    setLoading(true);
     try {
       const response = await getRotationalPayments(groupId);
-      return response.data;
+      setPayments(response.data);
     } catch (error) {
-      toast.error(error.response?.data || 'Failed to fetch payments');
+      console.error('Error fetching payments:', error);
+      toast.error('Failed to fetch payments');
       throw error;
-    } finally {
-      setLoading(false);
     }
   };
 
   const uploadSlip = async (paymentId, slipData) => {
-    setLoading(true);
     try {
       const response = await uploadPaymentSlip(paymentId, slipData);
+      setPayments(payments.map((payment) =>
+        payment.paymentId === paymentId ? response.data : payment
+      ));
       toast.success('Slip uploaded successfully');
-      return response.data;
     } catch (error) {
-      toast.error(error.response?.data || 'Failed to upload slip');
+      console.error('Error uploading slip:', error);
+      toast.error('Failed to upload slip');
       throw error;
-    } finally {
-      setLoading(false);
     }
   };
 
   const deleteGroup = async (groupId) => {
-    setLoading(true);
     try {
       await deleteRotationalGroup(groupId);
-      setGroups(groups.filter((g) => g.groupId !== groupId));
+      setGroups(groups.filter((group) => group.groupId !== groupId));
       toast.success('Group deleted successfully');
     } catch (error) {
-      toast.error(error.response?.data || 'Failed to delete group');
+      console.error('Error deleting group:', error);
+      toast.error('Failed to delete group');
       throw error;
-    } finally {
-      setLoading(false);
     }
   };
 
-  useEffect(() => {
-    fetchGroups();
-  }, []);
-
   return {
     groups,
+    payments,
     loading,
-    fetchGroups,
     createNewGroup,
     updateExistingGroup,
     addMembers,
