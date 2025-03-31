@@ -1,37 +1,60 @@
-// src/pages/RotationalPlanPages/CreateRotationalPlan.jsx
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import useRotational from '../../hooks/useRotational';
+import { getRotationalGroups, getRotationalGroupMembers } from '../../services/api';
 import InputField from '../../components/InputField';
 import toast from 'react-hot-toast';
 
 const CreateRotationalPlan = () => {
   const { groupId } = useParams();
   const navigate = useNavigate();
+  const { createPlan } = useRotational();
+  const [members, setMembers] = useState([]);
+  const [planData, setPlanData] = useState([]);
+  const [creator, setIsCreator] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [numMembers, setNumMembers] = useState(0);
 
-  // Dummy data
-  const dummyGroup = {
-    groupId: parseInt(groupId),
-    groupName: 'Updated Friends Savings',
-    numMembers: 5,
-    isCreator: true,
-  };
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // Fetch group details
+        const groupsResponse = await getRotationalGroups();
+        const group = groupsResponse.data.find((g) => g.groupId === parseInt(groupId));
+        if (!group) {
+          toast.error('Group not found');
+          navigate('/rotational-page');
+          return;
+        }
+        if (!group.creator) {
+          toast.error('You are not authorized to create a plan for this group');
+          navigate(`/rotational/${groupId}/payments`);
+          return;
+        }
+        setIsCreator(true);
+        setNumMembers(group.numMembers);
 
-  const dummyMembers = [
-    { id: 1, username: 'Member 1' },
-    { id: 2, username: 'Member 2' },
-    { id: 3, username: 'Member 3' },
-    { id: 4, username: 'Member 4' },
-    { id: 5, username: 'Member 5' },
-  ];
+        // Fetch group members
+        const membersResponse = await getRotationalGroupMembers(groupId);
+        setMembers(membersResponse.data);
 
-  const [members] = useState(dummyMembers);
-  const [planData, setPlanData] = useState(
-    Array.from({ length: dummyGroup.numMembers }, (_, index) => ({
-      monthNumber: index + 1,
-      recipientId: '',
-      amount: '',
-    }))
-  );
+        // Initialize plan data based on numMembers
+        const initialPlan = Array.from({ length: group.numMembers }, (_, index) => ({
+          monthNumber: index + 1,
+          recipientId: '',
+          amount: '',
+        }));
+        setPlanData(initialPlan);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+        toast.error('Failed to fetch group details: ' + (error.response?.data?.message || error.message));
+        navigate('/rotational-page');
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, [groupId, navigate]);
 
   const handlePlanChange = (index, field, value) => {
     const updatedPlan = [...planData];
@@ -39,7 +62,7 @@ const CreateRotationalPlan = () => {
     setPlanData(updatedPlan);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     // Validate the plan
     for (let i = 0; i < planData.length; i++) {
@@ -54,16 +77,18 @@ const CreateRotationalPlan = () => {
       }
     }
 
-    // Simulate successful plan creation
-    toast.success('Plan created successfully');
-    navigate(`/rotational/${groupId}/payments`);
+    try {
+      await createPlan(groupId, planData);
+      toast.success('Plan created successfully');
+      navigate(`/rotational/${groupId}/payments`);
+    } catch (error) {
+      toast.error('Error creating plan: ' + (error.response?.data?.message || error.message));
+      console.error('Error creating plan:', error);
+    }
   };
 
-  if (!dummyGroup.isCreator) {
-    toast.error('You are not authorized to create a plan for this group');
-    navigate(`/rotational/${groupId}/payments`);
-    return null;
-  }
+  if (loading) return <div>Loading...</div>;
+  if (!creator) return null;
 
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center">

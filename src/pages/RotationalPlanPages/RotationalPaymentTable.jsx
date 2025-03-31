@@ -1,6 +1,6 @@
 // src/components/Rotational/RotationalPaymentTable.jsx
 import { Link } from 'react-router-dom';
-
+ 
 const RotationalPaymentTable = ({ payments, currentUserId }) => {
   if (!payments || payments.length === 0) {
     return <p className="text-gray-600">No payments recorded yet.</p>;
