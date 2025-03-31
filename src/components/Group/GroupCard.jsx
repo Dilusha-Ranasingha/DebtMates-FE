@@ -1,85 +1,237 @@
-import { Link } from 'react-router-dom';
-import { useEffect, useState } from 'react';
-import { getGroupDebts, getGroupMembers } from '../../services/api'; // Import getGroupMembers
+"use client"
+
+import { Link } from "react-router-dom"
+import { useEffect, useState } from "react"
+import { getGroupDebts, getGroupMembers } from "../../services/api"
 
 const GroupCard = ({ group }) => {
-  const { groupId, groupName, groupDescription, numMembers, isCreator } = group;
-  const [debts, setDebts] = useState([]);
-  const [currentUsers, setCurrentUsers] = useState(0); // State for current users
-  const [loading, setLoading] = useState(false);
-  const [loadingMembers, setLoadingMembers] = useState(false); // State for loading members
+  const { groupId, groupName, groupDescription, numMembers, isCreator } = group
+  const [debts, setDebts] = useState([])
+  const [members, setMembers] = useState([])
+  const [loading, setLoading] = useState(false)
+  const [loadingMembers, setLoadingMembers] = useState(false)
+  const [expanded, setExpanded] = useState(false)
 
   // Fetch group debts
   useEffect(() => {
     const fetchDebts = async () => {
-      setLoading(true);
+      setLoading(true)
       try {
-        const response = await getGroupDebts(groupId);
-        setDebts(response.data);
+        const response = await getGroupDebts(groupId)
+        setDebts(response.data || [])
       } catch (error) {
-        console.error('Failed to fetch debts:', error);
+        console.error("Failed to fetch debts:", error)
+        setDebts([])
       } finally {
-        setLoading(false);
+        setLoading(false)
       }
-    };
-    fetchDebts();
-  }, [groupId]);
+    }
+    fetchDebts()
+  }, [groupId])
 
-  // Fetch group members to get the current number of users
+  // Fetch group members
   useEffect(() => {
     const fetchMembers = async () => {
-      setLoadingMembers(true);
+      setLoadingMembers(true)
       try {
-        const response = await getGroupMembers(groupId); // Fetch members from the API
-        setCurrentUsers(response.data.length); // Set the number of current users
+        const response = await getGroupMembers(groupId)
+        setMembers(response.data || [])
       } catch (error) {
-        console.error('Failed to fetch group members:', error);
-        setCurrentUsers(0); // Fallback to 0 if there's an error
+        console.error("Failed to fetch group members:", error)
+        setMembers([])
       } finally {
-        setLoadingMembers(false);
+        setLoadingMembers(false)
       }
-    };
-    fetchMembers();
-  }, [groupId]);
+    }
+    fetchMembers()
+  }, [groupId])
 
-  const totalDebt = debts.reduce((sum, debt) => sum + (debt.expected || 0) + (debt.gte || 0), 0);
+  const totalDebt = debts.reduce((sum, debt) => sum + (debt.expected || 0) + (debt.gte || 0), 0)
+
+  // Calculate debt per member
+  const debtPerMember = members.length > 0 ? totalDebt / members.length : 0
+
+  // Get the highest debt
+  const highestDebt = debts.length > 0 ? Math.max(...debts.map((debt) => (debt.expected || 0) + (debt.gte || 0))) : 0
+
+  // Format currency
+  const formatCurrency = (amount) => {
+    return new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: "USD",
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    }).format(amount)
+  }
+
+  // Calculate debt status color
+  const getDebtStatusColor = () => {
+    if (totalDebt === 0) return "bg-green-500"
+    if (totalDebt < 1000) return "bg-yellow-500"
+    if (totalDebt < 5000) return "bg-orange-500"
+    return "bg-red-500"
+  }
 
   return (
-    <div className="bg-white p-4 rounded-lg shadow-lg mb-4">
-      <h3 className="text-lg font-bold text-blue-700">{groupName}</h3>
-      <p className="text-gray-600">{groupDescription}</p>
-      <p className="text-sm text-gray-500">Group: {groupId}</p>
-      <p className="text-sm text-gray-500">Members: {numMembers}</p>
-      {loadingMembers ? (
-        <p className="text-sm text-gray-500">Loading current users...</p>
-      ) : (
-        <p className="text-sm text-gray-500">Current Users: {currentUsers}</p>
-      )}
-      {loading ? (
-        <p className="text-sm text-gray-500">Loading debts...</p>
-      ) : (
-        <p className="text-sm text-gray-500">Total Debt: ${totalDebt.toFixed(2)}</p>
-      )}
-      <div className="mt-4 flex flex-wrap gap-2">
-        <Link to={`/groups/${groupId}/debts`} className="btn-primary">
-          View Details
-        </Link>
-        {isCreator && (
-          <>
-            <Link to={`/groups/${groupId}/edit`} className="btn-secondary">
-              Edit
-            </Link>
-            <Link to={`/groups/${groupId}/add-members`} className="btn-primary">
-              Add Members
-            </Link>
-            <Link to={`/groups/${groupId}/record-debt`} className="btn-primary">
-              Record Debt
-            </Link>
-          </>
+    <div className="bg-gray-800/50 rounded-xl border border-gray-700/50 shadow-lg overflow-hidden transition-all duration-300 hover:shadow-xl hover:border-blue-700/50">
+      {/* Card Header */}
+      <div className="relative">
+        <div className="absolute top-0 left-0 w-full h-1">
+          <div
+            className={`h-full ${getDebtStatusColor()}`}
+            style={{ width: `${Math.min((totalDebt / 10000) * 100, 100)}%` }}
+          ></div>
+        </div>
+        <div className="p-5">
+          <div className="flex justify-between items-start">
+            <div>
+              <h3 className="text-xl font-bold text-white mb-1">{groupName}</h3>
+              <p className="text-gray-400 text-sm line-clamp-2">{groupDescription}</p>
+            </div>
+            {isCreator && <span className="bg-blue-900/50 text-blue-300 text-xs px-2 py-1 rounded-full">Creator</span>}
+          </div>
+        </div>
+      </div>
+
+      {/* Card Body */}
+      <div className="px-5 pb-3">
+        <div className="grid grid-cols-2 gap-4 mb-4">
+          <div className="bg-gray-700/30 p-3 rounded-lg">
+            <p className="text-gray-400 text-xs mb-1">Total Debt</p>
+            <p className="text-lg font-semibold text-white">
+              {loading ? (
+                <span className="inline-block w-16 h-6 bg-gray-600 animate-pulse rounded"></span>
+              ) : (
+                formatCurrency(totalDebt)
+              )}
+            </p>
+          </div>
+          <div className="bg-gray-700/30 p-3 rounded-lg">
+            <p className="text-gray-400 text-xs mb-1">Members</p>
+            <p className="text-lg font-semibold text-white">
+              {loadingMembers ? (
+                <span className="inline-block w-10 h-6 bg-gray-600 animate-pulse rounded"></span>
+              ) : (
+                members.length
+              )}
+            </p>
+          </div>
+        </div>
+
+        {/* Debt Progress */}
+        <div className="mb-4">
+          <div className="flex justify-between text-xs text-gray-400 mb-1">
+            <span>Debt Distribution</span>
+            <span>{formatCurrency(debtPerMember)} / member</span>
+          </div>
+          <div className="w-full bg-gray-700 rounded-full h-1.5">
+            <div
+              className={`h-1.5 rounded-full ${getDebtStatusColor()}`}
+              style={{ width: `${Math.min((totalDebt / 10000) * 100, 100)}%` }}
+            ></div>
+          </div>
+        </div>
+
+        {/* Expanded Content */}
+        {expanded && (
+          <div className="mt-4 space-y-3 border-t border-gray-700/50 pt-3 animate-fadeIn">
+            <p className="text-sm text-gray-300 font-medium">Group Details</p>
+            <p className="text-xs text-gray-400">Group ID: {groupId}</p>
+
+            {debts.length > 0 && (
+              <div>
+                <p className="text-sm text-gray-300 font-medium mt-3 mb-2">Recent Debts</p>
+                <div className="space-y-2 max-h-40 overflow-y-auto">
+                  {debts.slice(0, 3).map((debt, index) => (
+                    <div key={index} className="bg-gray-700/30 p-2 rounded-lg text-xs">
+                      <div className="flex justify-between">
+                        <span className="text-gray-300">{debt.description || `Debt #${index + 1}`}</span>
+                        <span className="text-white font-medium">
+                          {formatCurrency((debt.expected || 0) + (debt.gte || 0))}
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
         )}
+
+        {/* Card Actions */}
+        <div className="mt-4 flex flex-wrap gap-2">
+          <Link
+            to={`/groups/${groupId}/debts`}
+            className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded-lg text-sm font-medium transition-colors duration-200"
+          >
+            View Details
+          </Link>
+
+          {isCreator && (
+            <>
+              <Link
+                to={`/groups/${groupId}/record-debt`}
+                className="bg-green-600 hover:bg-green-700 text-white px-3 py-1.5 rounded-lg text-sm font-medium transition-colors duration-200"
+              >
+                Record Debt
+              </Link>
+
+              <Link
+                to={`/groups/${groupId}/edit`}
+                className="bg-gray-600 hover:bg-gray-700 text-white px-3 py-1.5 rounded-lg text-sm font-medium transition-colors duration-200"
+              >
+                Edit
+              </Link>
+
+              <Link
+                to={`/groups/${groupId}/add-members`}
+                className="bg-purple-600 hover:bg-purple-700 text-white px-3 py-1.5 rounded-lg text-sm font-medium transition-colors duration-200"
+              >
+                Add Members
+              </Link>
+
+              <div className="flex-1 flex justify-end">
+                <button
+                  onClick={() => setExpanded(!expanded)}
+                  className="text-gray-400 hover:text-white p-1.5 rounded-lg transition-colors duration-200"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className={`h-5 w-5 transition-transform duration-300 ${expanded ? "rotate-180" : ""}`}
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+              </div>
+            </>
+          )}
+
+          {!isCreator && (
+            <div className="flex-1 flex justify-end">
+              <button
+                onClick={() => setExpanded(!expanded)}
+                className="text-gray-400 hover:text-white p-1.5 rounded-lg transition-colors duration-200"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className={`h-5 w-5 transition-transform duration-300 ${expanded ? "rotate-180" : ""}`}
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+            </div>
+          )}
+        </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default GroupCard;
+export default GroupCard
+
