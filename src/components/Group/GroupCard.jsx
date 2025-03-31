@@ -46,13 +46,18 @@ const GroupCard = ({ group }) => {
     fetchMembers()
   }, [groupId])
 
-  const totalDebt = debts.reduce((sum, debt) => sum + (debt.expected || 0) + (debt.gte || 0), 0)
+  // Calculate total debt (sum of expected contributions)
+  const totalDebt = debts.reduce((sum, debt) => sum + (debt.expected || 0), 0)
 
   // Calculate debt per member
   const debtPerMember = members.length > 0 ? totalDebt / members.length : 0
 
   // Get the highest debt
-  const highestDebt = debts.length > 0 ? Math.max(...debts.map((debt) => (debt.expected || 0) + (debt.gte || 0))) : 0
+  const highestDebt = debts.length > 0 ? Math.max(...debts.map((debt) => debt.amountToPay || 0)) : 0
+
+  // Calculate the logged-in user's debt
+  const loggedInUser = localStorage.getItem('username') || 'Max'; // Assuming username is stored in localStorage
+  const loggedInUserDebt = debts.find(debt => debt.memberName === loggedInUser)?.amountToPay || 0;
 
   // Format currency
   const formatCurrency = (amount) => {
@@ -97,7 +102,7 @@ const GroupCard = ({ group }) => {
       <div className="px-5 pb-3">
         <div className="grid grid-cols-2 gap-4 mb-4">
           <div className="bg-gray-700/30 p-3 rounded-lg">
-            <p className="text-gray-400 text-xs mb-1">Total Debt</p>
+            <p className="text-gray-400 text-xs mb-1">Total Bill</p>
             <p className="text-lg font-semibold text-white">
               {loading ? (
                 <span className="inline-block w-16 h-6 bg-gray-600 animate-pulse rounded"></span>
@@ -107,12 +112,36 @@ const GroupCard = ({ group }) => {
             </p>
           </div>
           <div className="bg-gray-700/30 p-3 rounded-lg">
-            <p className="text-gray-400 text-xs mb-1">Members</p>
+            <p className="text-gray-400 text-xs mb-1">All Members</p>
             <p className="text-lg font-semibold text-white">
               {loadingMembers ? (
                 <span className="inline-block w-10 h-6 bg-gray-600 animate-pulse rounded"></span>
               ) : (
-                members.length
+                numMembers
+              )}
+            </p>
+          </div>
+        </div>
+
+        {/* Additional Stats */}
+        <div className="grid grid-cols-2 gap-4 mb-4">
+          <div className="bg-gray-700/30 p-3 rounded-lg">
+            <p className="text-gray-400 text-xs mb-1">Current Users</p>
+            <p className="text-lg font-semibold text-white">
+              {loadingMembers ? (
+                <span className="inline-block w-10 h-6 bg-gray-600 animate-pulse rounded"></span>
+              ) : (
+                members.length || 4
+              )}
+            </p>
+          </div>
+          <div className="bg-gray-700/30 p-3 rounded-lg">
+            <p className="text-gray-400 text-xs mb-1">Fixed Debt</p>
+            <p className="text-lg font-semibold text-white">
+              {loading ? (
+                <span className="inline-block w-16 h-6 bg-gray-600 animate-pulse rounded"></span>
+              ) : (
+                formatCurrency(loggedInUserDebt) // Display the logged-in user's debt
               )}
             </p>
           </div>
@@ -234,4 +263,3 @@ const GroupCard = ({ group }) => {
 }
 
 export default GroupCard
-
