@@ -42,7 +42,7 @@ const GroupCard = ({ group }) => {
     fetchMembers();
   }, [groupId]);
 
-  const totalDebt = debts.reduce((sum, debt) => sum + (debt.amountToPay || 0), 0);
+  const totalDebt = debts.reduce((sum, debt) => sum + (debt.expected || 0) + (debt.gte || 0), 0);
 
   return (
     <div className="bg-white p-4 rounded-lg shadow-lg mb-4">
