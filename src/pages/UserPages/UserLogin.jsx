@@ -60,7 +60,7 @@ const UserLogin = () => {
         showConfirmButton: false,
         timer: 1500,
       });
-      navigate('/');
+      navigate('/dashboardPage');
     } catch (error) {
       toast.error(error.response?.data || 'Login failed');
     }
