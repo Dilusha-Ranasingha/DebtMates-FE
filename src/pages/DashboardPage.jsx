@@ -286,7 +286,7 @@ const DashboardPage = () => {
               <h3 className="text-xl font-bold mb-4">Quick Actions</h3>
               <div className="grid grid-cols-2 gap-3">
                 <Link
-                  to="/record-debt"
+                  to="/dashboard"
                   className="bg-blue-900/30 hover:bg-blue-800/50 transition-colors duration-200 p-4 rounded-lg flex flex-col items-center text-center"
                 >
                   <div className="bg-blue-500/20 p-2 rounded-full mb-2">
@@ -308,7 +308,7 @@ const DashboardPage = () => {
                   <span className="text-sm">Record Debt</span>
                 </Link>
                 <Link
-                  to="/make-payment"
+                  to="/groups/create"
                   className="bg-green-900/30 hover:bg-green-800/50 transition-colors duration-200 p-4 rounded-lg flex flex-col items-center text-center"
                 >
                   <div className="bg-green-500/20 p-2 rounded-full mb-2">
@@ -330,7 +330,7 @@ const DashboardPage = () => {
                   <span className="text-sm">Make Payment</span>
                 </Link>
                 <Link
-                  to="/add-savings"
+                  to="/groups/create"
                   className="bg-purple-900/30 hover:bg-purple-800/50 transition-colors duration-200 p-4 rounded-lg flex flex-col items-center text-center"
                 >
                   <div className="bg-purple-500/20 p-2 rounded-full mb-2">
@@ -352,7 +352,7 @@ const DashboardPage = () => {
                   <span className="text-sm">Add Savings</span>
                 </Link>
                 <Link
-                  to="/create-group"
+                  to="/groups/create"
                   className="bg-yellow-900/30 hover:bg-yellow-800/50 transition-colors duration-200 p-4 rounded-lg flex flex-col items-center text-center"
                 >
                   <div className="bg-yellow-500/20 p-2 rounded-full mb-2">
@@ -377,21 +377,22 @@ const DashboardPage = () => {
             </div>
 
             {/* Your Groups */}
+            {/* Your Groups */}
             <div className="bg-gray-800/50 rounded-xl p-6 border border-gray-700/50 shadow-lg">
               <h3 className="text-xl font-bold mb-4">Your Groups</h3>
               {groups.length > 0 ? (
                 <div className="space-y-3">
                   {groups.slice(0, 3).map((group, index) => (
                     <Link
-                      key={group.id || index}
-                      to={`/groups/${group.id}`}
+                      key={group.groupId || index}
+                      to={`/groups/${group.groupId}/debts`} // Navigate to the specific group details page
                       className="flex items-center p-3 bg-gray-700/30 hover:bg-gray-700/50 rounded-lg transition-colors duration-200"
                     >
                       <div className="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center mr-3">
-                        <span className="font-semibold text-blue-400">{group.name?.charAt(0) || "G"}</span>
+                        <span className="font-semibold text-blue-400">{group.groupName?.charAt(0) || "G"}</span>
                       </div>
                       <div className="flex-1">
-                        <h4 className="font-medium">{group.name || `Group ${index + 1}`}</h4>
+                        <h4 className="font-medium">{group.groupName || `Group ${index + 1}`}</h4>
                         <p className="text-sm text-gray-400">{group.members?.length || 0} members</p>
                       </div>
                       <div className="text-right">
@@ -400,7 +401,7 @@ const DashboardPage = () => {
                     </Link>
                   ))}
                   {groups.length > 3 && (
-                    <Link to="/groups" className="text-blue-400 text-sm flex items-center hover:underline">
+                    <Link to="/dashboard" className="text-blue-400 text-sm flex items-center hover:underline">
                       <span>View all groups</span>
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
