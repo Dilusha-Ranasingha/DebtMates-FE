@@ -27,7 +27,18 @@ const Navbar = () => {
   const handleLogout = async () => {
     try {
       await logout();
-      toast.success('Logged out successfully');
+      toast.success('Logged out successfully', {
+        style: {
+          background: '#1f2937', // Tailwind's bg-gray-800
+          color: '#ffffff', // Tailwind's text-white
+          borderRadius: '0.375rem', // Tailwind's rounded-md
+          boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)', // Tailwind's shadow-md
+        },
+        iconTheme: {
+          primary: '#3b82f6', // Tailwind's blue-500
+          secondary: '#ffffff', // Tailwind's text-white
+        },
+      });
     } catch (error) {
       toast.error(error.response?.data || 'Failed to logout');
     } finally {
