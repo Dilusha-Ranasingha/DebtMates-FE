@@ -138,7 +138,7 @@ const Footer = () => {
                 </a>
               </li>
               <li>
-                <a href="#" className="hover:text-blue-400 transition-colors duration-300 flex items-center group">
+                <a href="/privacy-policy" className="hover:text-blue-400 transition-colors duration-300 flex items-center group">
                   <span className="w-1 h-1 bg-blue-500 rounded-full mr-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
                   Privacy Policy
                 </a>

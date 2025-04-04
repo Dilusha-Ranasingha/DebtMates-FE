@@ -29,6 +29,7 @@ import RotationalPayments from './pages/RotationalPlanPages/RotationalPayments';
 import UploadSlip from './pages/RotationalPlanPages/UploadSlip';
 import DashboardPage from './pages/DashboardPage';
 import About from './pages/About';
+import PrivacyPolicy from './pages/PrivacyPolicy';
 
 function App() {
   return (
@@ -62,6 +63,7 @@ function App() {
               <Route path="/rotational/:groupId/payments" element={<ProtectedRoute><RotationalPayments /></ProtectedRoute>} />
               <Route path="/rotational/payments/:paymentId/upload-slip" element={<ProtectedRoute><UploadSlip /></ProtectedRoute>} />
               <Route path="/aboutUs" element={<About/>} />
+              <Route path="/privacy-policy" element={<PrivacyPolicy />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </main>
