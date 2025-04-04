@@ -144,7 +144,7 @@ const Footer = () => {
                 </a>
               </li>
               <li>
-                <a href="#" className="hover:text-blue-400 transition-colors duration-300 flex items-center group">
+                <a href="/TermsofService" className="hover:text-blue-400 transition-colors duration-300 flex items-center group">
                   <span className="w-1 h-1 bg-blue-500 rounded-full mr-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
                   Terms of Service
                 </a>
@@ -158,7 +158,7 @@ const Footer = () => {
           <div className="mt-4 flex justify-center space-x-4">
             <a href="#" className="text-gray-500 hover:text-blue-400 transition-colors duration-300 text-sm">Privacy Policy</a>
             <span className="text-gray-700">•</span>
-            <a href="#" className="text-gray-500 hover:text-blue-400 transition-colors duration-300 text-sm">Terms of Service</a>
+            <a href="/TermsofService" className="text-gray-500 hover:text-blue-400 transition-colors duration-300 text-sm">Terms of Service</a>
             <span className="text-gray-700">•</span>
             <a href="#" className="text-gray-500 hover:text-blue-400 transition-colors duration-300 text-sm">Contact Us</a>
           </div>
