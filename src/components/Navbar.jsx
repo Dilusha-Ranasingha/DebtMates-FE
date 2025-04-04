@@ -2,6 +2,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { logout } from '../services/api';
 import { useState, useEffect } from 'react';
+import dashboardLogo from '../assets/daashboardLogo.png'; // Import the logo
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -51,8 +52,12 @@ const Navbar = () => {
   return (
     <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 animate-slideIn ${scrolled ? 'bg-[#0f111a]/90 backdrop-blur-md shadow-lg' : 'bg-[#0f111a]'}`}>    
       <div className="container mx-auto flex justify-between items-center py-4 px-4">
-        <Link to={token ? "/dashboardPage" : "/"} className="text-white text-2xl font-bold group">
-          <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-blue-600 group-hover:from-blue-300 group-hover:to-blue-500 transition-all duration-300">DebtMates</span>
+        <Link to={token ? "/dashboardPage" : "/"} className="flex items-center group">
+          <img 
+            src={dashboardLogo} 
+            alt="DebtMates Logo" 
+            className="h-8 w-auto transition-all duration-300 group-hover:brightness-125"
+          />
         </Link>
         <div className="space-x-4">
           {token ? (
