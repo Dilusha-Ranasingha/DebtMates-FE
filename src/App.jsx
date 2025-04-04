@@ -28,6 +28,7 @@ import CreateRotationalPlan from './pages/RotationalPlanPages/CreateRotationalPl
 import RotationalPayments from './pages/RotationalPlanPages/RotationalPayments';
 import UploadSlip from './pages/RotationalPlanPages/UploadSlip';
 import DashboardPage from './pages/DashboardPage';
+import About from './pages/About';
 
 function App() {
   return (
@@ -60,6 +61,7 @@ function App() {
               <Route path="/rotational/groups/:groupId/plan" element={<ProtectedRoute><CreateRotationalPlan /></ProtectedRoute>} />
               <Route path="/rotational/:groupId/payments" element={<ProtectedRoute><RotationalPayments /></ProtectedRoute>} />
               <Route path="/rotational/payments/:paymentId/upload-slip" element={<ProtectedRoute><UploadSlip /></ProtectedRoute>} />
+              <Route path="/aboutUs" element={<About/>} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </main>

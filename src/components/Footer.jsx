@@ -126,7 +126,7 @@ const Footer = () => {
             </h4>
             <ul className="space-y-2">
               <li>
-                <a href="#" className="hover:text-blue-400 transition-colors duration-300 flex items-center group">
+                <a href="/aboutUs" className="hover:text-blue-400 transition-colors duration-300 flex items-center group">
                   <span className="w-1 h-1 bg-blue-500 rounded-full mr-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
                   About Us
                 </a>
