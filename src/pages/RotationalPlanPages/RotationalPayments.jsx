@@ -7,7 +7,7 @@ const RotationalPayments = () => {
   const { groupId } = useParams();
   const [payments, setPayments] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [slipUrls, setSlipUrls] = useState({}); // To store URLs for payment slips
+  const [slipUrls, setSlipUrls] = useState({}); // Store Cloudinary URLs
 
   useEffect(() => {
     const fetchPayments = async () => {
@@ -15,19 +15,13 @@ const RotationalPayments = () => {
         const response = await getRotationalPayments(groupId);
         setPayments(response.data);
 
-        // Fetch slips for payments that have them
+        // Fetch existing slip URLs
         const slipPromises = response.data
-          .filter((payment) => payment.slip)
-          .map(async (payment) => {
-            try {
-              const slipResponse = await getPaymentSlip(payment.paymentId);
-              const url = URL.createObjectURL(slipResponse.data);
-              return { paymentId: payment.paymentId, url };
-            } catch (error) {
-              console.error(`Error fetching slip for payment ${payment.paymentId}:`, error);
-              return { paymentId: payment.paymentId, url: null };
-            }
-          });
+          .filter((payment) => payment.slipUrl) // Check if slipUrl exists
+          .map(async (payment) => ({
+            paymentId: payment.paymentId,
+            url: payment.slipUrl, // Use slipUrl directly from payment data
+          }));
 
         const slipResults = await Promise.all(slipPromises);
         const slipUrlMap = slipResults.reduce((acc, { paymentId, url }) => {
@@ -53,30 +47,22 @@ const RotationalPayments = () => {
     }
 
     try {
-      const reader = new FileReader();
-      reader.onload = async (event) => {
-        const arrayBuffer = event.target.result;
-        const blob = new Blob([arrayBuffer], { type: file.type });
-        await uploadPaymentSlip(paymentId, blob);
-        toast.success('Slip uploaded successfully');
+      const response = await uploadPaymentSlip(paymentId, file);
+      toast.success('Slip uploaded successfully');
 
-        // Fetch the updated slip URL
-        const slipResponse = await getPaymentSlip(paymentId);
-        const url = URL.createObjectURL(slipResponse.data);
-        setSlipUrls((prev) => ({ ...prev, [paymentId]: url }));
+      // Update slipUrls with the new URL from the response
+      const newUrl = response.data.slipUrl; // Assuming the backend returns { slipUrl: "..." }
+      setSlipUrls((prev) => ({ ...prev, [paymentId]: newUrl }));
 
-        // Refresh payments to update status
-        const response = await getRotationalPayments(groupId);
-        setPayments(response.data);
-      };
-      reader.readAsArrayBuffer(file);
+      // Refresh payments to update status
+      const updatedResponse = await getRotationalPayments(groupId);
+      setPayments(updatedResponse.data);
     } catch (error) {
       console.error('Error uploading slip:', error);
       toast.error('Failed to upload slip: ' + (error.response?.data?.message || error.message));
     }
   };
 
-  // Group payments by month
   const groupedPayments = payments.reduce((acc, payment) => {
     const month = payment.plan.monthNumber;
     if (!acc[month]) {
@@ -131,14 +117,11 @@ const RotationalPayments = () => {
                           <td className="p-4 text-gray-700">{payment.status}</td>
                           <td className="p-4">
                             {slipUrls[payment.paymentId] ? (
-                              <a
-                                href={slipUrls[payment.paymentId]}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="text-blue-600 hover:underline"
-                              >
-                                View Slip
-                              </a>
+                              <img
+                                src={slipUrls[payment.paymentId]}
+                                alt="Payment Slip"
+                                className="max-w-xs h-auto rounded-lg"
+                              />
                             ) : (
                               <input
                                 type="file"
