@@ -53,9 +53,13 @@ export const updateRotationalGroup = (groupId, data) => api.put(`/rotational/gro
 export const addRotationalMembers = (groupId, memberIds) => api.post(`/rotational/groups/${groupId}/members`, { memberIds });
 export const createRotationalPlan = (groupId, data) => api.post(`/rotational/groups/${groupId}/plan`, data);
 export const getRotationalPayments = (groupId) => api.get(`/rotational/groups/${groupId}/payments`);
-export const uploadPaymentSlip = (paymentId, slipData) => api.put(`/rotational/payments/${paymentId}/slip`, slipData, {
-  headers: { 'Content-Type': 'application/octet-stream' },
-});
-export const getPaymentSlip = (paymentId) => api.get(`/rotational/payments/${paymentId}/slip`, { responseType: 'blob' });
+export const uploadPaymentSlip = (paymentId, file) => {
+  const formData = new FormData();
+  formData.append('file', file);
+  return api.put(`/rotational/payments/${paymentId}/slip`, formData, {
+    headers: { 'Content-Type': 'multipart/form-data' },
+  });
+};
+export const getPaymentSlip = (paymentId) => api.get(`/rotational/payments/${paymentId}/slip`);
 export const deleteRotationalGroup = (groupId) => api.delete(`/rotational/groups/${groupId}`);
 export const getRotationalGroupMembers = (groupId) => api.get(`/rotational/groups/${groupId}/members`);
