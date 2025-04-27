@@ -37,7 +37,7 @@ const Navbar = () => {
               <Link to="/#" className="text-white hover:text-blue-200">
                 Rotational Savings
               </Link>
-              <Link to="/#" className="text-white hover:text-blue-200">
+              <Link to="/personal-saving" className="text-white hover:text-blue-200">
                 Personal Savings
               </Link>
               <Link to="/profile" className="text-white hover:text-blue-200">
