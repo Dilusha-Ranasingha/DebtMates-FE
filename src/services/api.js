@@ -45,3 +45,19 @@ export const addGroupMembers = (groupId, userIds) => api.post(`/groups/${groupId
 export const recordDebt = (groupId, data) => api.post(`/groups/${groupId}/debts`, data);     //This is record the debt to the backend
 export const getGroupMembers = (groupId) => api.get(`/groups/${groupId}/members`);
 export const searchUsers = (query, searchBy = 'username') => api.get(`/user/search?${searchBy}=${query}`);
+
+// Personal Saving functions
+export const getAllSavingPlans = () => api.get('/savings-plans/user/1'); // This is to get all the saving plans for the user
+export const getSavingPlanById = (planId) => api.get(`/savings-plans/${planId}`);
+export const createSavingPlan = (data) => api.post('/savings-plans', data);
+export const updateSavingPlan = (planId, data) => api.put(`/savings-plans/${planId}`, data);
+export const deleteSavingPlan = (planId) => api.delete(`/savings-plans/${planId}`);
+export const recordSavingTransaction = (planId, data) => api.post(`/savings-plans/${planId}/deposit`, data);
+export const getSavingStats = () => {
+  return api.get('/savings-plans/stats')
+    .catch(error => {
+      console.error('Error in getSavingStats:', error.response?.status, error.response?.data || error.message);
+      // You can also implement a retry logic here if needed
+      throw error; // Re-throw for the component to handle
+    });
+};
