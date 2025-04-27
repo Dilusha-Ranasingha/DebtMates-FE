@@ -20,6 +20,10 @@ import AddMembers from './pages/GroupPages/AddMembers';
 import RecordDebt from './pages/GroupPages/RecordDebt';
 import Home from './pages/Home';
 import DebtSummary from './pages/GroupPages/DebtSummary';
+import PersonalSavaing from './pages/PersonalSavingPages/PersonalSavaing';
+import CreatePlan from './pages/PersonalSavingPages/CreatePlan';
+import UpdatePlan from './pages/PersonalSavingPages/UpdatePlan';
+import ViewPlan from './pages/PersonalSavingPages/ViewPlan';
 
 function App() {
   return (
@@ -43,6 +47,11 @@ function App() {
           <Route path="/groups/:groupId/edit" element={<ProtectedRoute><EditGroup /></ProtectedRoute>} />
           <Route path="/groups/:groupId/add-members" element={<ProtectedRoute><AddMembers /></ProtectedRoute>} />
           <Route path="/groups/:groupId/record-debt" element={<ProtectedRoute><RecordDebt /></ProtectedRoute>} />
+          <Route path="/personal-saving" element={<ProtectedRoute><PersonalSavaing /></ProtectedRoute>} />
+          <Route path="/create-plan" element={<ProtectedRoute><CreatePlan/></ProtectedRoute>} />
+          <Route path="/update-plan/:id" element={<ProtectedRoute><UpdatePlan/></ProtectedRoute>} />
+          <Route path="/view-plan/:id" element={<ProtectedRoute><ViewPlan/></ProtectedRoute>} />
+          
           <Route path="*" element={<NotFound />} />
         </Routes>
         <Footer />
