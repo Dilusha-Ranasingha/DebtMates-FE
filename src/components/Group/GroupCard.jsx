@@ -79,6 +79,7 @@ const GroupCard = ({ group }) => {
 
   return (
     <div className="bg-gray-800/50 rounded-xl border border-gray-700/50 shadow-lg overflow-hidden transition-all duration-300 hover:shadow-xl hover:border-blue-700/50">
+      
       {/* Card Header */}
       <div className="relative">
         <div className="absolute top-0 left-0 w-full h-1">
@@ -191,7 +192,8 @@ const GroupCard = ({ group }) => {
         <div className="mt-4 flex flex-wrap gap-2">
           <Link
             to={`/groups/${groupId}/debts`}
-            className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded-lg text-sm font-medium transition-colors duration-200"
+            className="hover:bg-blue-700 text-white px-3 py-1.5 rounded-lg text-sm font-medium transition-colors duration-200"
+            style={{ backgroundColor: '#0c2769' }}
           >
             View Details
           </Link>
@@ -200,7 +202,8 @@ const GroupCard = ({ group }) => {
             <>
               <Link
                 to={`/groups/${groupId}/record-debt`}
-                className="bg-green-600 hover:bg-green-700 text-white px-3 py-1.5 rounded-lg text-sm font-medium transition-colors duration-200"
+                className="text-white px-3 py-1.5 rounded-lg text-sm font-medium transition-colors duration-200"
+                style={{ backgroundColor: '#0d401f' }}
               >
                 Record Debt
               </Link>
@@ -214,7 +217,8 @@ const GroupCard = ({ group }) => {
 
               <Link
                 to={`/groups/${groupId}/add-members`}
-                className="bg-purple-600 hover:bg-purple-700 text-white px-3 py-1.5 rounded-lg text-sm font-medium transition-colors duration-200"
+                className="hover:bg-purple-700 text-white px-3 py-1.5 rounded-lg text-sm font-medium transition-colors duration-200"
+                style={{ backgroundColor: '#301b40' }}
               >
                 Add Members
               </Link>
