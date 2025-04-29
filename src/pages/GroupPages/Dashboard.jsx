@@ -44,6 +44,8 @@ const Dashboard = () => {
         <div
           className={`mb-8 transition-all duration-700 transform ${animate ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"}`}
         >
+
+          {/* Header title and Create Group Button */}
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
             <div>
               <h1 className="text-3xl font-bold text-white mb-2">Debt Management</h1>
@@ -68,6 +70,8 @@ const Dashboard = () => {
 
           {/* Summary Cards */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+
+
             {/* Total Groups Card */}
             <div className="bg-gradient-to-br from-blue-900/40 to-blue-700/20 rounded-xl p-5 border border-blue-800/30 shadow-lg">
               <div className="flex justify-between items-start">
@@ -104,41 +108,6 @@ const Dashboard = () => {
                       width: `${(groups.filter((g) => g.isCreator).length / Math.max(groups.length, 1)) * 100}%`,
                     }}
                   ></div>
-                </div>
-              </div>
-            </div>
-
-            {/* Total Debt Card */}
-            <div className="bg-gradient-to-br from-red-900/40 to-red-700/20 rounded-xl p-5 border border-red-800/30 shadow-lg">
-              <div className="flex justify-between items-start">
-                <div>
-                  <p className="text-gray-400 text-sm">Total Debt</p>
-                  <h3 className="text-2xl font-bold mt-1">${totalDebtAcrossGroups.toFixed(2)}</h3>
-                </div>
-                <div className="p-2 bg-red-500/20 rounded-lg">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-6 w-6 text-red-400"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                    />
-                  </svg>
-                </div>
-              </div>
-              <div className="mt-4">
-                <div className="flex justify-between text-sm mb-1">
-                  <span>Highest Group Debt</span>
-                  <span>${Math.max(...groups.map((g) => g.totalDebt || 0)).toFixed(2)}</span>
-                </div>
-                <div className="w-full bg-gray-700 rounded-full h-1.5">
-                  <div className="bg-red-500 h-1.5 rounded-full animate-pulse" style={{ width: "75%" }}></div>
                 </div>
               </div>
             </div>
@@ -181,7 +150,10 @@ const Dashboard = () => {
                 </div>
               </div>
             </div>
+
           </div>
+
+
         </div>
 
         {/* Search and Filter Section */}
