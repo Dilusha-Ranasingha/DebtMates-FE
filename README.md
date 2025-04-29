@@ -56,7 +56,7 @@ DebtMates is a financial management system designed to simplify debt tracking, r
    ```bash
    npm start
    ```
-   The app will run on `http://localhost:3000`.
+   The app will run on `http://localhost:5173`.
 
 ## 🔐API Integration
 The frontend interacts with the DebtMates backend via the following endpoints:
