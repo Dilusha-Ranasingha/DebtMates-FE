@@ -144,6 +144,13 @@ const RotationalGroupCard = ({ group, onDelete, view = "grid" }) => {
                 View Payments
               </Link>
 
+              <Link
+                to={`/rotational/groups/${groupId}/plan`}
+                className="bg-cyan-600 hover:bg-cyan-700 text-white px-3 py-1.5 rounded-lg text-sm font-medium transition-colors duration-200"
+              >
+                Add Plan
+              </Link>
+
               {creator && (
                 <>
                   <div className="flex md:flex-col space-x-2 md:space-x-0 md:space-y-2">
@@ -283,6 +290,13 @@ const RotationalGroupCard = ({ group, onDelete, view = "grid" }) => {
             className="bg-teal-600 hover:bg-teal-700 text-white px-3 py-1.5 rounded-lg text-sm font-medium transition-colors duration-200"
           >
             View Payments
+          </Link>
+
+          <Link
+            to={`/rotational/groups/${groupId}/plan`}
+            className="bg-cyan-600 hover:bg-cyan-700 text-white px-3 py-1.5 rounded-lg text-sm font-medium transition-colors duration-200"
+          >
+            Add Plan
           </Link>
 
           {creator && (
