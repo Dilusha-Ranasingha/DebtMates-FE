@@ -103,5 +103,5 @@ This project is licensed under the MIT License.
 
 ## 🧰Languages and Tools
 <p align="left">
-    <img src="https://skillicons.dev/icons?i=react,spring,git,docker,postman,materialui,tailwind,postgres" />
+    <img src="https://skillicons.dev/icons?i=react,vite,git,tailwind" />
 </p>
