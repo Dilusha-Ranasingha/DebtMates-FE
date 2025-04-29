@@ -53,37 +53,37 @@ const RotationalPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-teal-50 to-white text-gray-800 p-4 md:p-6">
+    <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800 text-gray-100 p-4 md:p-6">
       <div className="max-w-7xl mx-auto">
         {/* Header Section with Circular Design */}
         <div
           className={`mb-12 transition-all duration-700 transform ${animate ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"}`}
         >
-          <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-teal-500 to-emerald-500 p-8 shadow-lg">
+          <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-teal-900 to-teal-800 p-8 shadow-lg border border-teal-700">
             {/* Decorative circles */}
-            <div className="absolute -top-20 -right-20 w-64 h-64 rounded-full bg-teal-400/20 animate-spin-slow"></div>
-            <div className="absolute -bottom-32 -left-32 w-96 h-96 rounded-full bg-emerald-400/20 animate-spin-slow-reverse"></div>
+            <div className="absolute -top-20 -right-20 w-64 h-64 rounded-full bg-teal-600/10 animate-spin-slow"></div>
+            <div className="absolute -bottom-32 -left-32 w-96 h-96 rounded-full bg-teal-600/10 animate-spin-slow-reverse"></div>
 
             <div className="relative z-10 flex flex-col md:flex-row justify-between items-center">
               <div className="text-center md:text-left mb-6 md:mb-0">
                 <h1 className="text-4xl md:text-5xl font-bold text-white mb-2">Rotational Savings</h1>
-                <p className="text-teal-100 text-lg max-w-xl">
+                <p className="text-teal-200 text-lg max-w-xl">
                   Collaborate with friends and family to save together through rotating contributions and payouts
                 </p>
               </div>
               <div className="flex flex-col items-center">
                 <div className="relative w-32 h-32 mb-4">
-                  <div className="absolute inset-0 rounded-full border-4 border-dashed border-teal-200 animate-spin-slow"></div>
-                  <div className="absolute inset-2 rounded-full bg-white flex items-center justify-center">
+                  <div className="absolute inset-0 rounded-full border-4 border-dashed border-teal-500/50 animate-spin-slow"></div>
+                  <div className="absolute inset-2 rounded-full bg-gray-800 flex items-center justify-center">
                     <div className="text-center">
-                      <p className="text-teal-800 text-xs font-medium">Total Savings</p>
-                      <p className="text-teal-900 text-2xl font-bold">{formatCurrency(totalSavings)}</p>
+                      <p className="text-teal-300 text-xs font-medium">Total Savings</p>
+                      <p className="text-teal-100 text-2xl font-bold">{formatCurrency(totalSavings)}</p>
                     </div>
                   </div>
                 </div>
                 <button
                   onClick={() => navigate("/rotational/create")}
-                  className="bg-white text-teal-700 hover:bg-teal-50 px-6 py-3 rounded-full font-medium transition-colors duration-200 flex items-center shadow-md"
+                  className="bg-teal-600 hover:bg-teal-700 text-white px-6 py-3 rounded-full font-medium transition-colors duration-200 flex items-center shadow-md"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -106,14 +106,14 @@ const RotationalPage = () => {
           className={`grid grid-cols-1 md:grid-cols-3 gap-6 mb-10 transition-all duration-700 delay-100 transform ${animate ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"}`}
         >
           {/* Total Groups Card */}
-          <div className="bg-white rounded-2xl p-6 shadow-md border border-teal-100 relative overflow-hidden">
-            <div className="absolute -right-6 -top-6 w-24 h-24 rounded-full bg-teal-100"></div>
+          <div className="bg-gray-800 rounded-2xl p-6 shadow-md border border-gray-700 relative overflow-hidden">
+            <div className="absolute -right-6 -top-6 w-24 h-24 rounded-full bg-teal-900/40"></div>
             <div className="relative z-10">
               <div className="flex items-center mb-4">
-                <div className="w-12 h-12 rounded-full bg-teal-100 flex items-center justify-center mr-4">
+                <div className="w-12 h-12 rounded-full bg-teal-900/50 flex items-center justify-center mr-4">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    className="h-6 w-6 text-teal-600"
+                    className="h-6 w-6 text-teal-400"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -127,13 +127,13 @@ const RotationalPage = () => {
                   </svg>
                 </div>
                 <div>
-                  <h3 className="text-xl font-bold text-gray-800">Total Cycles</h3>
-                  <p className="text-gray-500 text-sm">Active and completed savings cycles</p>
+                  <h3 className="text-xl font-bold text-white">Total Cycles</h3>
+                  <p className="text-gray-400 text-sm">Active and completed savings cycles</p>
                 </div>
               </div>
               <div className="flex items-end justify-between">
-                <div className="text-3xl font-bold text-teal-700">{groups.length}</div>
-                <div className="text-sm text-teal-600">
+                <div className="text-3xl font-bold text-teal-400">{groups.length}</div>
+                <div className="text-sm text-teal-300">
                   <span className="font-medium">{groups.filter((g) => g.creator).length}</span> created by you
                 </div>
               </div>
@@ -141,14 +141,14 @@ const RotationalPage = () => {
           </div>
 
           {/* Total Members Card */}
-          <div className="bg-white rounded-2xl p-6 shadow-md border border-emerald-100 relative overflow-hidden">
-            <div className="absolute -right-6 -top-6 w-24 h-24 rounded-full bg-emerald-100"></div>
+          <div className="bg-gray-800 rounded-2xl p-6 shadow-md border border-gray-700 relative overflow-hidden">
+            <div className="absolute -right-6 -top-6 w-24 h-24 rounded-full bg-emerald-900/40"></div>
             <div className="relative z-10">
               <div className="flex items-center mb-4">
-                <div className="w-12 h-12 rounded-full bg-emerald-100 flex items-center justify-center mr-4">
+                <div className="w-12 h-12 rounded-full bg-emerald-900/50 flex items-center justify-center mr-4">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    className="h-6 w-6 text-emerald-600"
+                    className="h-6 w-6 text-emerald-400"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -162,15 +162,15 @@ const RotationalPage = () => {
                   </svg>
                 </div>
                 <div>
-                  <h3 className="text-xl font-bold text-gray-800">Total Members</h3>
-                  <p className="text-gray-500 text-sm">People participating in your cycles</p>
+                  <h3 className="text-xl font-bold text-white">Total Members</h3>
+                  <p className="text-gray-400 text-sm">People participating in your cycles</p>
                 </div>
               </div>
               <div className="flex items-end justify-between">
-                <div className="text-3xl font-bold text-emerald-700">
+                <div className="text-3xl font-bold text-emerald-400">
                   {groups.reduce((sum, group) => sum + (group.numMembers || 0), 0)}
                 </div>
-                <div className="text-sm text-emerald-600">
+                <div className="text-sm text-emerald-300">
                   <span className="font-medium">
                     {groups.length
                       ? (groups.reduce((sum, g) => sum + (g.numMembers || 0), 0) / groups.length).toFixed(1)
@@ -183,14 +183,14 @@ const RotationalPage = () => {
           </div>
 
           {/* Savings Status Card */}
-          <div className="bg-white rounded-2xl p-6 shadow-md border border-cyan-100 relative overflow-hidden">
-            <div className="absolute -right-6 -top-6 w-24 h-24 rounded-full bg-cyan-100"></div>
+          <div className="bg-gray-800 rounded-2xl p-6 shadow-md border border-gray-700 relative overflow-hidden">
+            <div className="absolute -right-6 -top-6 w-24 h-24 rounded-full bg-cyan-900/40"></div>
             <div className="relative z-10">
               <div className="flex items-center mb-4">
-                <div className="w-12 h-12 rounded-full bg-cyan-100 flex items-center justify-center mr-4">
+                <div className="w-12 h-12 rounded-full bg-cyan-900/50 flex items-center justify-center mr-4">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    className="h-6 w-6 text-cyan-600"
+                    className="h-6 w-6 text-cyan-400"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -204,13 +204,13 @@ const RotationalPage = () => {
                   </svg>
                 </div>
                 <div>
-                  <h3 className="text-xl font-bold text-gray-800">Active Cycles</h3>
-                  <p className="text-gray-500 text-sm">Currently running savings cycles</p>
+                  <h3 className="text-xl font-bold text-white">Active Cycles</h3>
+                  <p className="text-gray-400 text-sm">Currently running savings cycles</p>
                 </div>
               </div>
               <div className="flex items-end justify-between">
-                <div className="text-3xl font-bold text-cyan-700">{groups.filter((g) => g.active).length}</div>
-                <div className="text-sm text-cyan-600">
+                <div className="text-3xl font-bold text-cyan-400">{groups.filter((g) => g.active).length}</div>
+                <div className="text-sm text-cyan-300">
                   <span className="font-medium">
                     {groups.length
                       ? `${Math.round((groups.filter((g) => g.completed).length / groups.length) * 100)}%`
@@ -227,7 +227,7 @@ const RotationalPage = () => {
         <div
           className={`mb-8 transition-all duration-700 delay-200 transform ${animate ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"}`}
         >
-          <div className="bg-white rounded-2xl p-4 shadow-md border border-gray-100">
+          <div className="bg-gray-800 rounded-2xl p-4 shadow-md border border-gray-700">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center space-y-4 md:space-y-0">
               <div className="relative w-full md:w-64">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -246,7 +246,7 @@ const RotationalPage = () => {
                 </div>
                 <input
                   type="text"
-                  className="bg-gray-50 border border-gray-200 text-gray-700 pl-10 pr-4 py-2 rounded-full w-full focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                  className="bg-gray-700 border border-gray-600 text-white pl-10 pr-4 py-2 rounded-full w-full focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
                   placeholder="Search cycles..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
@@ -257,7 +257,7 @@ const RotationalPage = () => {
                 <button
                   onClick={() => setActiveFilter("all")}
                   className={`px-4 py-2 rounded-full transition-colors duration-200 ${
-                    activeFilter === "all" ? "bg-teal-500 text-white" : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                    activeFilter === "all" ? "bg-teal-600 text-white" : "bg-gray-700 text-gray-300 hover:bg-gray-600"
                   }`}
                 >
                   All Cycles
@@ -266,8 +266,8 @@ const RotationalPage = () => {
                   onClick={() => setActiveFilter("created")}
                   className={`px-4 py-2 rounded-full transition-colors duration-200 ${
                     activeFilter === "created"
-                      ? "bg-teal-500 text-white"
-                      : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                      ? "bg-teal-600 text-white"
+                      : "bg-gray-700 text-gray-300 hover:bg-gray-600"
                   }`}
                 >
                   Created by Me
@@ -275,7 +275,7 @@ const RotationalPage = () => {
                 <button
                   onClick={() => setActiveFilter("joined")}
                   className={`px-4 py-2 rounded-full transition-colors duration-200 ${
-                    activeFilter === "joined" ? "bg-teal-500 text-white" : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                    activeFilter === "joined" ? "bg-teal-600 text-white" : "bg-gray-700 text-gray-300 hover:bg-gray-600"
                   }`}
                 >
                   Joined
@@ -286,7 +286,7 @@ const RotationalPage = () => {
                 <button
                   onClick={() => setView("grid")}
                   className={`p-2 rounded-md transition-colors duration-200 ${
-                    view === "grid" ? "bg-teal-100 text-teal-700" : "bg-gray-100 text-gray-500"
+                    view === "grid" ? "bg-teal-900 text-teal-300" : "bg-gray-700 text-gray-400"
                   }`}
                 >
                   <svg
@@ -307,7 +307,7 @@ const RotationalPage = () => {
                 <button
                   onClick={() => setView("carousel")}
                   className={`p-2 rounded-md transition-colors duration-200 ${
-                    view === "carousel" ? "bg-teal-100 text-teal-700" : "bg-gray-100 text-gray-500"
+                    view === "carousel" ? "bg-teal-900 text-teal-300" : "bg-gray-700 text-gray-400"
                   }`}
                 >
                   <svg
@@ -332,9 +332,9 @@ const RotationalPage = () => {
           </div>
         ) : getFilteredGroups().length === 0 ? (
           <div
-            className={`bg-white rounded-2xl p-10 text-center border border-gray-200 shadow-md transition-all duration-700 delay-300 transform ${animate ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"}`}
+            className={`bg-gray-800 rounded-2xl p-10 text-center border border-gray-700 shadow-md transition-all duration-700 delay-300 transform ${animate ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"}`}
           >
-            <div className="w-24 h-24 mx-auto mb-6 rounded-full bg-teal-50 flex items-center justify-center">
+            <div className="w-24 h-24 mx-auto mb-6 rounded-full bg-gray-700 flex items-center justify-center">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-12 w-12 text-teal-400"
@@ -350,8 +350,8 @@ const RotationalPage = () => {
                 />
               </svg>
             </div>
-            <h3 className="text-2xl font-bold text-gray-800 mb-2">No savings cycles found</h3>
-            <p className="text-gray-500 mb-8 max-w-md mx-auto">
+            <h3 className="text-2xl font-bold text-white mb-2">No savings cycles found</h3>
+            <p className="text-gray-400 mb-8 max-w-md mx-auto">
               {searchTerm
                 ? "No cycles match your search criteria."
                 : activeFilter === "all"
@@ -362,7 +362,7 @@ const RotationalPage = () => {
             </p>
             <button
               onClick={() => navigate("/rotational/create")}
-              className="bg-teal-500 hover:bg-teal-600 text-white px-6 py-3 rounded-full font-medium transition-colors duration-200 inline-flex items-center shadow-md"
+              className="bg-teal-600 hover:bg-teal-700 text-white px-6 py-3 rounded-full font-medium transition-colors duration-200 inline-flex items-center shadow-md"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"

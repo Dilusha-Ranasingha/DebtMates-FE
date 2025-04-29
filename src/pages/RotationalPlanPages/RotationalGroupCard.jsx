@@ -62,44 +62,46 @@ const RotationalGroupCard = ({ group, onDelete, view = "grid" }) => {
 
   if (view === "list") {
     return (
-      <div className="bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden transition-all duration-300 hover:shadow-lg hover:border-teal-200">
+      <div className="bg-gray-800 rounded-xl shadow-md border border-gray-700 overflow-hidden transition-all duration-300 hover:shadow-lg hover:border-teal-700">
         <div className="flex flex-col md:flex-row">
           {/* Left side with cycle info */}
           <div className="p-5 flex-grow">
             <div className="flex items-center mb-3">
-              <div className="w-12 h-12 rounded-full bg-teal-100 flex items-center justify-center mr-4 relative">
-                <div className="absolute inset-0 rounded-full border-2 border-teal-300 border-dashed animate-spin-slow"></div>
-                <span className="font-bold text-teal-700">{groupName.charAt(0)}</span>
+              <div className="w-12 h-12 rounded-full bg-teal-900/50 flex items-center justify-center mr-4 relative">
+                <div className="absolute inset-0 rounded-full border-2 border-teal-500/50 border-dashed animate-spin-slow"></div>
+                <span className="font-bold text-teal-400">{groupName.charAt(0)}</span>
               </div>
               <div>
                 <div className="flex items-center">
-                  <h3 className="text-xl font-bold text-gray-800 mr-2">{groupName}</h3>
-                  {creator && <span className="bg-teal-100 text-teal-700 text-xs px-2 py-1 rounded-full">Creator</span>}
+                  <h3 className="text-xl font-bold text-white mr-2">{groupName}</h3>
+                  {creator && (
+                    <span className="bg-teal-900/50 text-teal-300 text-xs px-2 py-1 rounded-full">Creator</span>
+                  )}
                 </div>
-                <p className="text-gray-500 text-sm line-clamp-1">{groupDescription}</p>
+                <p className="text-gray-400 text-sm line-clamp-1">{groupDescription}</p>
               </div>
             </div>
 
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
               <div>
                 <p className="text-gray-500 text-xs">Members</p>
-                <p className="font-semibold text-gray-800">{numMembers || 0}</p>
+                <p className="font-semibold text-white">{numMembers || 0}</p>
               </div>
               <div>
                 <p className="text-gray-500 text-xs">Contribution</p>
-                <p className="font-semibold text-gray-800">{formatCurrency(contributionAmount)}</p>
+                <p className="font-semibold text-white">{formatCurrency(contributionAmount)}</p>
               </div>
               <div>
                 <p className="text-gray-500 text-xs">Next Payout</p>
-                <p className="font-semibold text-gray-800">{formatDate(nextPayoutDate)}</p>
+                <p className="font-semibold text-white">{formatDate(nextPayoutDate)}</p>
               </div>
               <div>
                 <p className="text-gray-500 text-xs">Status</p>
                 <div className="flex items-center">
                   <span
-                    className={`inline-block w-2 h-2 rounded-full mr-2 ${active ? "bg-teal-500" : "bg-gray-400"}`}
+                    className={`inline-block w-2 h-2 rounded-full mr-2 ${active ? "bg-teal-500" : "bg-gray-500"}`}
                   ></span>
-                  <span className={`font-semibold ${active ? "text-teal-600" : "text-gray-500"}`}>
+                  <span className={`font-semibold ${active ? "text-teal-400" : "text-gray-400"}`}>
                     {active ? "Active" : "Inactive"}
                   </span>
                 </div>
@@ -108,11 +110,11 @@ const RotationalGroupCard = ({ group, onDelete, view = "grid" }) => {
           </div>
 
           {/* Right side with actions */}
-          <div className="bg-gray-50 p-5 flex flex-row md:flex-col justify-between items-center md:w-48">
+          <div className="bg-gray-700 p-5 flex flex-row md:flex-col justify-between items-center md:w-48">
             <div className="text-center mb-4 hidden md:block">
               <div className="inline-block relative">
                 <svg className="w-16 h-16" viewBox="0 0 36 36">
-                  <circle cx="18" cy="18" r="16" fill="none" className="stroke-gray-200" strokeWidth="2"></circle>
+                  <circle cx="18" cy="18" r="16" fill="none" className="stroke-gray-600" strokeWidth="2"></circle>
                   <circle
                     cx="18"
                     cy="18"
@@ -126,18 +128,18 @@ const RotationalGroupCard = ({ group, onDelete, view = "grid" }) => {
                   ></circle>
                 </svg>
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <span className="text-sm font-bold text-teal-700">{progress}%</span>
+                  <span className="text-sm font-bold text-teal-300">{progress}%</span>
                 </div>
               </div>
               {daysUntilPayout !== null && (
-                <p className="text-xs text-gray-500 mt-1">{daysUntilPayout} days until next payout</p>
+                <p className="text-xs text-gray-400 mt-1">{daysUntilPayout} days until next payout</p>
               )}
             </div>
 
             <div className="flex md:flex-col space-x-2 md:space-x-0 md:space-y-2">
               <Link
                 to={`/rotational/${groupId}/payments`}
-                className="bg-teal-500 hover:bg-teal-600 text-white px-3 py-1.5 rounded-lg text-sm font-medium transition-colors duration-200"
+                className="bg-teal-600 hover:bg-teal-700 text-white px-3 py-1.5 rounded-lg text-sm font-medium transition-colors duration-200"
               >
                 View Payments
               </Link>
@@ -147,13 +149,13 @@ const RotationalGroupCard = ({ group, onDelete, view = "grid" }) => {
                   <div className="flex md:flex-col space-x-2 md:space-x-0 md:space-y-2">
                     <Link
                       to={`/rotational/groups/${groupId}`}
-                      className="bg-gray-200 hover:bg-gray-300 text-gray-700 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors duration-200"
+                      className="bg-gray-600 hover:bg-gray-500 text-white px-3 py-1.5 rounded-lg text-sm font-medium transition-colors duration-200"
                     >
                       Edit
                     </Link>
                     <button
                       onClick={() => setDeleteDialog(true)}
-                      className="bg-red-100 hover:bg-red-200 text-red-600 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors duration-200"
+                      className="bg-red-900/50 hover:bg-red-800 text-red-300 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors duration-200"
                     >
                       Delete
                     </button>
@@ -176,21 +178,21 @@ const RotationalGroupCard = ({ group, onDelete, view = "grid" }) => {
   }
 
   return (
-    <div className="bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden transition-all duration-300 hover:shadow-lg hover:border-teal-200">
+    <div className="bg-gray-800 rounded-xl shadow-md border border-gray-700 overflow-hidden transition-all duration-300 hover:shadow-lg hover:border-teal-700">
       {/* Card Header with Circular Progress */}
       <div className="relative p-5">
         <div className="flex justify-between items-start">
           <div className="flex items-center">
-            <div className="w-12 h-12 rounded-full bg-teal-100 flex items-center justify-center mr-4 relative">
-              <div className="absolute inset-0 rounded-full border-2 border-teal-300 border-dashed animate-spin-slow"></div>
-              <span className="font-bold text-teal-700">{groupName.charAt(0)}</span>
+            <div className="w-12 h-12 rounded-full bg-teal-900/50 flex items-center justify-center mr-4 relative">
+              <div className="absolute inset-0 rounded-full border-2 border-teal-500/50 border-dashed animate-spin-slow"></div>
+              <span className="font-bold text-teal-400">{groupName.charAt(0)}</span>
             </div>
             <div>
-              <h3 className="text-xl font-bold text-gray-800">{groupName}</h3>
-              <p className="text-gray-500 text-sm line-clamp-2">{groupDescription}</p>
+              <h3 className="text-xl font-bold text-white">{groupName}</h3>
+              <p className="text-gray-400 text-sm line-clamp-2">{groupDescription}</p>
             </div>
           </div>
-          {creator && <span className="bg-teal-100 text-teal-700 text-xs px-2 py-1 rounded-full">Creator</span>}
+          {creator && <span className="bg-teal-900/50 text-teal-300 text-xs px-2 py-1 rounded-full">Creator</span>}
         </div>
       </div>
 
@@ -199,7 +201,7 @@ const RotationalGroupCard = ({ group, onDelete, view = "grid" }) => {
         <div className="flex justify-between items-center mb-4">
           <div className="relative w-20 h-20">
             <svg className="w-20 h-20" viewBox="0 0 36 36">
-              <circle cx="18" cy="18" r="16" fill="none" className="stroke-gray-200" strokeWidth="2"></circle>
+              <circle cx="18" cy="18" r="16" fill="none" className="stroke-gray-600" strokeWidth="2"></circle>
               <circle
                 cx="18"
                 cy="18"
@@ -213,22 +215,22 @@ const RotationalGroupCard = ({ group, onDelete, view = "grid" }) => {
               ></circle>
             </svg>
             <div className="absolute inset-0 flex items-center justify-center">
-              <span className="text-lg font-bold text-teal-700">{progress}%</span>
+              <span className="text-lg font-bold text-teal-300">{progress}%</span>
             </div>
           </div>
 
           <div className="grid grid-cols-2 gap-4 flex-1 ml-4">
-            <div className="bg-gray-50 p-3 rounded-lg">
-              <p className="text-gray-500 text-xs mb-1">Members</p>
-              <p className="text-lg font-semibold text-gray-800">{numMembers || 0}</p>
+            <div className="bg-gray-700 p-3 rounded-lg">
+              <p className="text-gray-400 text-xs mb-1">Members</p>
+              <p className="text-lg font-semibold text-white">{numMembers || 0}</p>
             </div>
-            <div className="bg-gray-50 p-3 rounded-lg">
-              <p className="text-gray-500 text-xs mb-1">Status</p>
+            <div className="bg-gray-700 p-3 rounded-lg">
+              <p className="text-gray-400 text-xs mb-1">Status</p>
               <div className="flex items-center">
                 <span
-                  className={`inline-block w-2 h-2 rounded-full mr-2 ${active ? "bg-teal-500" : "bg-gray-400"}`}
+                  className={`inline-block w-2 h-2 rounded-full mr-2 ${active ? "bg-teal-500" : "bg-gray-500"}`}
                 ></span>
-                <span className={`font-semibold ${active ? "text-teal-600" : "text-gray-500"}`}>
+                <span className={`font-semibold ${active ? "text-teal-400" : "text-gray-400"}`}>
                   {active ? "Active" : "Inactive"}
                 </span>
               </div>
@@ -238,36 +240,36 @@ const RotationalGroupCard = ({ group, onDelete, view = "grid" }) => {
 
         {/* Additional Info */}
         <div className="grid grid-cols-2 gap-4 mb-4">
-          <div className="bg-gray-50 p-3 rounded-lg">
-            <p className="text-gray-500 text-xs mb-1">Contribution</p>
-            <p className="text-lg font-semibold text-gray-800">{formatCurrency(contributionAmount)}</p>
+          <div className="bg-gray-700 p-3 rounded-lg">
+            <p className="text-gray-400 text-xs mb-1">Contribution</p>
+            <p className="text-lg font-semibold text-white">{formatCurrency(contributionAmount)}</p>
           </div>
-          <div className="bg-gray-50 p-3 rounded-lg">
-            <p className="text-gray-500 text-xs mb-1">Next Payout</p>
-            <p className="text-sm font-semibold text-gray-800">{formatDate(nextPayoutDate)}</p>
-            {daysUntilPayout !== null && <p className="text-xs text-teal-600">{daysUntilPayout} days remaining</p>}
+          <div className="bg-gray-700 p-3 rounded-lg">
+            <p className="text-gray-400 text-xs mb-1">Next Payout</p>
+            <p className="text-sm font-semibold text-white">{formatDate(nextPayoutDate)}</p>
+            {daysUntilPayout !== null && <p className="text-xs text-teal-400">{daysUntilPayout} days remaining</p>}
           </div>
         </div>
 
         {/* Expanded Content */}
         {expanded && (
-          <div className="mt-4 space-y-3 border-t border-gray-200 pt-3 animate-fadeIn">
-            <p className="text-sm text-gray-700 font-medium">Cycle Details</p>
-            <p className="text-xs text-gray-500">Group ID: {groupId}</p>
+          <div className="mt-4 space-y-3 border-t border-gray-600 pt-3 animate-fadeIn">
+            <p className="text-sm text-gray-300 font-medium">Cycle Details</p>
+            <p className="text-xs text-gray-400">Group ID: {groupId}</p>
 
-            <div className="bg-gray-50 p-3 rounded-lg mt-3">
+            <div className="bg-gray-700 p-3 rounded-lg mt-3">
               <div className="flex justify-between items-center">
-                <p className="text-sm text-gray-700 font-medium">Payment Schedule</p>
-                <span className="text-xs text-gray-500">Monthly</span>
+                <p className="text-sm text-gray-300 font-medium">Payment Schedule</p>
+                <span className="text-xs text-gray-400">Monthly</span>
               </div>
               <div className="mt-2 space-y-1">
                 <div className="flex justify-between text-xs">
-                  <span className="text-gray-500">Total Cycle:</span>
-                  <span className="text-gray-700">{numMembers} months</span>
+                  <span className="text-gray-400">Total Cycle:</span>
+                  <span className="text-gray-300">{numMembers} months</span>
                 </div>
                 <div className="flex justify-between text-xs">
-                  <span className="text-gray-500">Total Value:</span>
-                  <span className="text-gray-700">{formatCurrency(contributionAmount * numMembers)}</span>
+                  <span className="text-gray-400">Total Value:</span>
+                  <span className="text-gray-300">{formatCurrency(contributionAmount * numMembers)}</span>
                 </div>
               </div>
             </div>
@@ -278,7 +280,7 @@ const RotationalGroupCard = ({ group, onDelete, view = "grid" }) => {
         <div className="mt-4 flex flex-wrap gap-2">
           <Link
             to={`/rotational/${groupId}/payments`}
-            className="bg-teal-500 hover:bg-teal-600 text-white px-3 py-1.5 rounded-lg text-sm font-medium transition-colors duration-200"
+            className="bg-teal-600 hover:bg-teal-700 text-white px-3 py-1.5 rounded-lg text-sm font-medium transition-colors duration-200"
           >
             View Payments
           </Link>
@@ -287,21 +289,21 @@ const RotationalGroupCard = ({ group, onDelete, view = "grid" }) => {
             <>
               <Link
                 to={`/rotational/groups/${groupId}`}
-                className="bg-gray-200 hover:bg-gray-300 text-gray-700 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors duration-200"
+                className="bg-gray-600 hover:bg-gray-500 text-white px-3 py-1.5 rounded-lg text-sm font-medium transition-colors duration-200"
               >
                 Edit
               </Link>
 
               <Link
                 to={`/rotational/groups/${groupId}/members`}
-                className="bg-blue-100 hover:bg-blue-200 text-blue-600 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors duration-200"
+                className="bg-blue-900/50 hover:bg-blue-800 text-blue-300 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors duration-200"
               >
                 Add Members
               </Link>
 
               <button
                 onClick={() => setDeleteDialog(true)}
-                className="bg-red-100 hover:bg-red-200 text-red-600 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors duration-200"
+                className="bg-red-900/50 hover:bg-red-800 text-red-300 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors duration-200"
               >
                 Delete
               </button>
@@ -309,7 +311,7 @@ const RotationalGroupCard = ({ group, onDelete, view = "grid" }) => {
               <div className="flex-1 flex justify-end">
                 <button
                   onClick={() => setExpanded(!expanded)}
-                  className="text-gray-400 hover:text-gray-600 p-1.5 rounded-lg transition-colors duration-200"
+                  className="text-gray-400 hover:text-gray-200 p-1.5 rounded-lg transition-colors duration-200"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -329,7 +331,7 @@ const RotationalGroupCard = ({ group, onDelete, view = "grid" }) => {
             <div className="flex-1 flex justify-end">
               <button
                 onClick={() => setExpanded(!expanded)}
-                className="text-gray-400 hover:text-gray-600 p-1.5 rounded-lg transition-colors duration-200"
+                className="text-gray-400 hover:text-gray-200 p-1.5 rounded-lg transition-colors duration-200"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
