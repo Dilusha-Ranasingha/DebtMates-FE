@@ -2,7 +2,7 @@
 Debt management frontend integration
 
 ## Setup
-1. Clone the repo: `git clone https://github.com/Dilusha-Ranasingha/DebtMates-FE.git`
+1. Clone the repository: `git clone https://github.com/Dilusha-Ranasingha/DebtMates-FE.git`
 2. Navigate to the project directory: `cd DebtMates-FE`
 3. Install Dependencies: `npm install`
 4. Start the Development Server,run: `npm run dev`
