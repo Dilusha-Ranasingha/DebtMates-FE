@@ -5,6 +5,8 @@ import { useState, useEffect } from "react"
 import useRotational from "../../hooks/useRotational"
 import LoadingSpinner from "../../components/LoadingSpinner"
 import RotationalGroupCard from "./RotationalGroupCard"
+import { getRotationalPayments, getProfile } from "../../services/api"
+import toast from "react-hot-toast"
 
 const RotationalPage = () => {
   const navigate = useNavigate()
@@ -12,7 +14,57 @@ const RotationalPage = () => {
   const [animate, setAnimate] = useState(false)
   const [activeFilter, setActiveFilter] = useState("all")
   const [searchTerm, setSearchTerm] = useState("")
-  const [view, setView] = useState("grid") // grid or carousel
+  const [view, setView] = useState("grid")
+  const [totalSavings, setTotalSavings] = useState(0)
+  const [savingsLoading, setSavingsLoading] = useState(true)
+
+  // Fetch logged-in user and total savings
+  useEffect(() => {
+    const fetchTotalSavings = async () => {
+      try {
+        // Fetch logged-in user's profile to get their username or ID
+        const profileResponse = await getProfile()
+        const loggedInUser = profileResponse.data // Assuming { username: "user1", userId: "123", ... }
+
+        if (!loggedInUser?.username) {
+          throw new Error("Unable to fetch user profile")
+        }
+
+        // Fetch payments for all groups
+        const paymentPromises = groups.map(async (group) => {
+          try {
+            const response = await getRotationalPayments(group.groupId)
+            return response.data || []
+          } catch (error) {
+            console.error(`Error fetching payments for group ${group.groupId}:`, error)
+            return []
+          }
+        })
+
+        const allPayments = (await Promise.all(paymentPromises)).flat()
+
+        // Calculate total savings for the logged-in user
+        const userSavings = allPayments
+          .filter((payment) => payment.payer?.username === loggedInUser.username)
+          .reduce((sum, payment) => sum + (payment.amount || 0), 0)
+
+        setTotalSavings(userSavings)
+      } catch (error) {
+        console.error("Error calculating total savings:", error)
+        toast.error("Failed to calculate total savings")
+        setTotalSavings(0)
+      } finally {
+        setSavingsLoading(false)
+      }
+    }
+
+    if (!loading && groups.length > 0) {
+      fetchTotalSavings()
+    } else {
+      setSavingsLoading(false)
+      setTotalSavings(0)
+    }
+  }, [loading, groups])
 
   // Trigger animations after component mounts
   useEffect(() => {
@@ -37,11 +89,6 @@ const RotationalPage = () => {
     return filteredGroups
   }
 
-  // Calculate total savings across all groups
-  const totalSavings = groups.reduce((total, group) => {
-    return total + (group.contributionAmount || 0) * (group.numMembers || 0)
-  }, 0)
-
   // Format currency
   const formatCurrency = (amount) => {
     return new Intl.NumberFormat("en-US", {
@@ -57,7 +104,9 @@ const RotationalPage = () => {
       <div className="max-w-7xl mx-auto">
         {/* Header Section with Circular Design */}
         <div
-          className={`mb-12 transition-all duration-700 transform ${animate ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"}`}
+          className={`mb-12 transition-all duration-700 transform ${
+            animate ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"
+          }`}
         >
           <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-teal-900 to-teal-800 p-8 shadow-lg border border-teal-700">
             {/* Decorative circles */}
@@ -77,7 +126,9 @@ const RotationalPage = () => {
                   <div className="absolute inset-2 rounded-full bg-gray-800 flex items-center justify-center">
                     <div className="text-center">
                       <p className="text-teal-300 text-xs font-medium">Total Savings</p>
-                      <p className="text-teal-100 text-2xl font-bold">{formatCurrency(totalSavings)}</p>
+                      <p className="text-teal-100 text-2xl font-bold">
+                        {savingsLoading ? "Loading..." : formatCurrency(totalSavings)}
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -103,7 +154,9 @@ const RotationalPage = () => {
 
         {/* Stats Cards with Circular Design */}
         <div
-          className={`grid grid-cols-1 md:grid-cols-2 gap-6 mb-10 transition-all duration-700 delay-100 transform ${animate ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"}`}
+          className={`grid grid-cols-1 md:grid-cols-2 gap-6 mb-10 transition-all duration-700 delay-100 transform ${
+            animate ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"
+          }`}
         >
           {/* Total Groups Card */}
           <div className="bg-gray-800 rounded-2xl p-6 shadow-md border border-gray-700 relative overflow-hidden">
@@ -181,51 +234,13 @@ const RotationalPage = () => {
               </div>
             </div>
           </div>
-
-          {/* Savings Status Card */}
-          {/* <div className="bg-gray-800 rounded-2xl p-6 shadow-md border border-gray-700 relative overflow-hidden">
-            <div className="absolute -right-6 -top-6 w-24 h-24 rounded-full bg-cyan-900/40"></div>
-            <div className="relative z-10">
-              <div className="flex items-center mb-4">
-                <div className="w-12 h-12 rounded-full bg-cyan-900/50 flex items-center justify-center mr-4">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-6 w-6 text-cyan-400"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                    />
-                  </svg>
-                </div>
-                <div>
-                  <h3 className="text-xl font-bold text-white">Active Cycles</h3>
-                  <p className="text-gray-400 text-sm">Currently running savings cycles</p>
-                </div>
-              </div>
-              <div className="flex items-end justify-between">
-                <div className="text-3xl font-bold text-cyan-400">{groups.filter((g) => g.active).length}</div>
-                <div className="text-sm text-cyan-300">
-                  <span className="font-medium">
-                    {groups.length
-                      ? `${Math.round((groups.filter((g) => g.completed).length / groups.length) * 100)}%`
-                      : "0%"}
-                  </span>{" "}
-                  completed
-                </div>
-              </div>
-            </div>
-          </div> */}
         </div>
 
         {/* Search and Filter Section */}
         <div
-          className={`mb-8 transition-all duration-700 delay-200 transform ${animate ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"}`}
+          className={`mb-8 transition-all duration-700 delay-200 transform ${
+            animate ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"
+          }`}
         >
           <div className="bg-gray-800 rounded-2xl p-4 shadow-md border border-gray-700">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center space-y-4 md:space-y-0">
@@ -332,7 +347,9 @@ const RotationalPage = () => {
           </div>
         ) : getFilteredGroups().length === 0 ? (
           <div
-            className={`bg-gray-800 rounded-2xl p-10 text-center border border-gray-700 shadow-md transition-all duration-700 delay-300 transform ${animate ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"}`}
+            className={`bg-gray-800 rounded-2xl p-10 text-center border border-gray-700 shadow-md transition-all duration-700 delay-300 transform ${
+              animate ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"
+            }`}
           >
             <div className="w-24 h-24 mx-auto mb-6 rounded-full bg-gray-700 flex items-center justify-center">
               <svg
@@ -355,10 +372,10 @@ const RotationalPage = () => {
               {searchTerm
                 ? "No cycles match your search criteria."
                 : activeFilter === "all"
-                  ? "You haven't created or joined any rotational savings cycles yet."
-                  : activeFilter === "created"
-                    ? "You haven't created any rotational savings cycles yet."
-                    : "You haven't joined any rotational savings cycles yet."}
+                ? "You haven't created or joined any rotational savings cycles yet."
+                : activeFilter === "created"
+                ? "You haven't created any rotational savings cycles yet."
+                : "You haven't joined any rotational savings cycles yet."}
             </p>
             <button
               onClick={() => navigate("/rotational/create")}
@@ -381,7 +398,9 @@ const RotationalPage = () => {
             {getFilteredGroups().map((group, index) => (
               <div
                 key={group.groupId}
-                className={`transition-all duration-700 transform ${animate ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"}`}
+                className={`transition-all duration-700 transform ${
+                  animate ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"
+                }`}
                 style={{ transitionDelay: `${300 + index * 100}ms` }}
               >
                 <RotationalGroupCard group={group} onDelete={deleteGroup} />
@@ -393,7 +412,9 @@ const RotationalPage = () => {
             {getFilteredGroups().map((group, index) => (
               <div
                 key={group.groupId}
-                className={`transition-all duration-700 transform ${animate ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"}`}
+                className={`transition-all duration-700 transform ${
+                  animate ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"
+                }`}
                 style={{ transitionDelay: `${300 + index * 100}ms` }}
               >
                 <RotationalGroupCard group={group} onDelete={deleteGroup} view="list" />
