@@ -5,7 +5,7 @@ import { useState } from "react"
 import Dialog from "../../components/Dialog"
 
 const RotationalGroupCard = ({ group, onDelete, view = "grid" }) => {
-  const { groupId, groupName, groupDescription, numMembers, creator, active, nextPayoutDate, contributionAmount } =
+  const { groupId, groupName, groupDescription, numMembers, creator, contributionAmount } =
     group
   const [deleteDialog, setDeleteDialog] = useState(false)
   const [expanded, setExpanded] = useState(false)
@@ -37,20 +37,20 @@ const RotationalGroupCard = ({ group, onDelete, view = "grid" }) => {
   }
 
   // Calculate days until next payout
-  const getDaysUntilNextPayout = () => {
-    if (!nextPayoutDate) return null
-    try {
-      const today = new Date()
-      const payoutDate = new Date(nextPayoutDate)
-      const diffTime = payoutDate - today
-      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
-      return diffDays > 0 ? diffDays : 0
-    } catch (e) {
-      return null
-    }
-  }
+  // const getDaysUntilNextPayout = () => {
+  //   if (!nextPayoutDate) return null
+  //   try {
+  //     const today = new Date()
+  //     const payoutDate = new Date(nextPayoutDate)
+  //     const diffTime = payoutDate - today
+  //     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
+  //     return diffDays > 0 ? diffDays : 0
+  //   } catch (e) {
+  //     return null
+  //   }
+  // }
 
-  const daysUntilPayout = getDaysUntilNextPayout()
+  // const daysUntilPayout = getDaysUntilNextPayout()
 
   // Calculate progress percentage
   const calculateProgress = () => {
@@ -87,15 +87,15 @@ const RotationalGroupCard = ({ group, onDelete, view = "grid" }) => {
                 <p className="text-gray-500 text-xs">Members</p>
                 <p className="font-semibold text-white">{numMembers || 0}</p>
               </div>
-              <div>
+              {/* <div>
                 <p className="text-gray-500 text-xs">Contribution</p>
                 <p className="font-semibold text-white">{formatCurrency(contributionAmount)}</p>
-              </div>
-              <div>
+              </div> */}
+              {/* <div>
                 <p className="text-gray-500 text-xs">Next Payout</p>
                 <p className="font-semibold text-white">{formatDate(nextPayoutDate)}</p>
-              </div>
-              <div>
+              </div> */}
+              {/* <div>
                 <p className="text-gray-500 text-xs">Status</p>
                 <div className="flex items-center">
                   <span
@@ -105,13 +105,13 @@ const RotationalGroupCard = ({ group, onDelete, view = "grid" }) => {
                     {active ? "Active" : "Inactive"}
                   </span>
                 </div>
-              </div>
+              </div> */}
             </div>
           </div>
 
           {/* Right side with actions */}
           <div className="bg-gray-700 p-5 flex flex-row md:flex-col justify-between items-center md:w-48">
-            <div className="text-center mb-4 hidden md:block">
+            {/* <div className="text-center mb-4 hidden md:block">
               <div className="inline-block relative">
                 <svg className="w-16 h-16" viewBox="0 0 36 36">
                   <circle cx="18" cy="18" r="16" fill="none" className="stroke-gray-600" strokeWidth="2"></circle>
@@ -134,7 +134,7 @@ const RotationalGroupCard = ({ group, onDelete, view = "grid" }) => {
               {daysUntilPayout !== null && (
                 <p className="text-xs text-gray-400 mt-1">{daysUntilPayout} days until next payout</p>
               )}
-            </div>
+            </div> */}
 
             <div className="flex md:flex-col space-x-2 md:space-x-0 md:space-y-2">
               <Link
@@ -231,7 +231,7 @@ const RotationalGroupCard = ({ group, onDelete, view = "grid" }) => {
               <p className="text-gray-400 text-xs mb-1">Members</p>
               <p className="text-lg font-semibold text-white">{numMembers || 0}</p>
             </div>
-            <div className="bg-gray-700 p-3 rounded-lg">
+            {/* <div className="bg-gray-700 p-3 rounded-lg">
               <p className="text-gray-400 text-xs mb-1">Status</p>
               <div className="flex items-center">
                 <span
@@ -241,21 +241,21 @@ const RotationalGroupCard = ({ group, onDelete, view = "grid" }) => {
                   {active ? "Active" : "Inactive"}
                 </span>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
 
         {/* Additional Info */}
         <div className="grid grid-cols-2 gap-4 mb-4">
           <div className="bg-gray-700 p-3 rounded-lg">
-            <p className="text-gray-400 text-xs mb-1">Contribution</p>
-            <p className="text-lg font-semibold text-white">{formatCurrency(contributionAmount)}</p>
+            <p className="text-gray-400 text-xs mb-1">Monthly Contribution</p>
+            <p className="text-lg font-semibold text-white">{}</p>
           </div>
-          <div className="bg-gray-700 p-3 rounded-lg">
+          {/* <div className="bg-gray-700 p-3 rounded-lg">
             <p className="text-gray-400 text-xs mb-1">Next Payout</p>
             <p className="text-sm font-semibold text-white">{formatDate(nextPayoutDate)}</p>
             {daysUntilPayout !== null && <p className="text-xs text-teal-400">{daysUntilPayout} days remaining</p>}
-          </div>
+          </div> */}
         </div>
 
         {/* Expanded Content */}
@@ -274,10 +274,10 @@ const RotationalGroupCard = ({ group, onDelete, view = "grid" }) => {
                   <span className="text-gray-400">Total Cycle:</span>
                   <span className="text-gray-300">{numMembers} months</span>
                 </div>
-                <div className="flex justify-between text-xs">
+                {/* <div className="flex justify-between text-xs">
                   <span className="text-gray-400">Total Value:</span>
                   <span className="text-gray-300">{formatCurrency(contributionAmount * numMembers)}</span>
-                </div>
+                </div> */}
               </div>
             </div>
           </div>
