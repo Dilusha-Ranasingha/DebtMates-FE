@@ -22,33 +22,43 @@ const RotationalPage = () => {
   useEffect(() => {
     const fetchTotalSavings = async () => {
       try {
-        // Fetch logged-in user's profile to get their username or ID
+        // Fetch logged-in user's profile
         const profileResponse = await getProfile()
-        const loggedInUser = profileResponse.data // Assuming { username: "user1", userId: "123", ... }
+        const loggedInUser = profileResponse.data
 
         if (!loggedInUser?.username) {
           throw new Error("Unable to fetch user profile")
         }
 
-        // Fetch payments for all groups
-        const paymentPromises = groups.map(async (group) => {
+        // Fetch payments for all groups and calculate contributions
+        let total = 0
+        for (const group of groups) {
           try {
             const response = await getRotationalPayments(group.groupId)
-            return response.data || []
+            const payments = response.data || []
+
+            // Get the monthly contribution amount (same logic as RotationalGroupCard)
+            const monthlyContribution = payments.length > 0 ? Math.round(payments[0].amount) : 0
+
+            // Count the number of payments made by the logged-in user
+            const userPayments = payments.filter(
+              (payment) => payment.payer?.username === loggedInUser.username
+            )
+            const paymentCount = userPayments.length
+
+            // Log for debugging
+            console.log(
+              `Group: ${group.groupName}, Monthly Contribution: ${monthlyContribution}, User Payments: ${paymentCount}`
+            )
+
+            // Add to total
+            total += monthlyContribution * paymentCount
           } catch (error) {
             console.error(`Error fetching payments for group ${group.groupId}:`, error)
-            return []
           }
-        })
+        }
 
-        const allPayments = (await Promise.all(paymentPromises)).flat()
-
-        // Calculate total savings for the logged-in user
-        const userSavings = allPayments
-          .filter((payment) => payment.payer?.username === loggedInUser.username)
-          .reduce((sum, payment) => sum + (payment.amount || 0), 0)
-
-        setTotalSavings(userSavings)
+        setTotalSavings(total)
       } catch (error) {
         console.error("Error calculating total savings:", error)
         toast.error("Failed to calculate total savings")
