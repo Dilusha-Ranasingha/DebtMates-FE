@@ -1,21 +1,45 @@
 "use client"
 
 import { Link } from "react-router-dom"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Dialog from "../../components/Dialog"
+import { getRotationalPayments } from "../../services/api"
+import toast from "react-hot-toast"
 
 const RotationalGroupCard = ({ group, onDelete, view = "grid" }) => {
-  const { groupId, groupName, groupDescription, numMembers, creator, contributionAmount } =
-    group
+  const { groupId, groupName, groupDescription, numMembers, creator } = group
   const [deleteDialog, setDeleteDialog] = useState(false)
   const [expanded, setExpanded] = useState(false)
+  const [contributionAmount, setContributionAmount] = useState(null)
+  const [loadingAmount, setLoadingAmount] = useState(true)
+
+  useEffect(() => {
+    const fetchPaymentAmount = async () => {
+      try {
+        const response = await getRotationalPayments(groupId)
+        const payments = response.data
+        if (payments.length > 0) {
+          setContributionAmount(payments[0].amount)
+        } else {
+          setContributionAmount(0)
+        }
+      } catch (error) {
+        console.error("Error fetching payment amount:", error)
+        toast.error("Failed to fetch contribution amount")
+        setContributionAmount(0)
+      } finally {
+        setLoadingAmount(false)
+      }
+    }
+
+    fetchPaymentAmount()
+  }, [groupId])
 
   const handleDelete = () => {
     onDelete(groupId)
     setDeleteDialog(false)
   }
 
-  // Format currency
   const formatCurrency = (amount) => {
     return new Intl.NumberFormat("en-US", {
       style: "currency",
@@ -25,7 +49,6 @@ const RotationalGroupCard = ({ group, onDelete, view = "grid" }) => {
     }).format(amount || 0)
   }
 
-  // Format date
   const formatDate = (dateString) => {
     if (!dateString) return "Not scheduled"
     try {
@@ -36,25 +59,7 @@ const RotationalGroupCard = ({ group, onDelete, view = "grid" }) => {
     }
   }
 
-  // Calculate days until next payout
-  // const getDaysUntilNextPayout = () => {
-  //   if (!nextPayoutDate) return null
-  //   try {
-  //     const today = new Date()
-  //     const payoutDate = new Date(nextPayoutDate)
-  //     const diffTime = payoutDate - today
-  //     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
-  //     return diffDays > 0 ? diffDays : 0
-  //   } catch (e) {
-  //     return null
-  //   }
-  // }
-
-  // const daysUntilPayout = getDaysUntilNextPayout()
-
-  // Calculate progress percentage
   const calculateProgress = () => {
-    // This is a placeholder calculation - in a real app, you'd use actual data
     return Math.floor(Math.random() * 100)
   }
 
@@ -64,7 +69,6 @@ const RotationalGroupCard = ({ group, onDelete, view = "grid" }) => {
     return (
       <div className="bg-gray-800 rounded-xl shadow-md border border-gray-700 overflow-hidden transition-all duration-300 hover:shadow-lg hover:border-teal-700">
         <div className="flex flex-col md:flex-row">
-          {/* Left side with cycle info */}
           <div className="p-5 flex-grow">
             <div className="flex items-center mb-3">
               <div className="w-12 h-12 rounded-full bg-teal-900/50 flex items-center justify-center mr-4 relative">
@@ -87,55 +91,16 @@ const RotationalGroupCard = ({ group, onDelete, view = "grid" }) => {
                 <p className="text-gray-500 text-xs">Members</p>
                 <p className="font-semibold text-white">{numMembers || 0}</p>
               </div>
-              {/* <div>
+              <div>
                 <p className="text-gray-500 text-xs">Contribution</p>
-                <p className="font-semibold text-white">{formatCurrency(contributionAmount)}</p>
-              </div> */}
-              {/* <div>
-                <p className="text-gray-500 text-xs">Next Payout</p>
-                <p className="font-semibold text-white">{formatDate(nextPayoutDate)}</p>
-              </div> */}
-              {/* <div>
-                <p className="text-gray-500 text-xs">Status</p>
-                <div className="flex items-center">
-                  <span
-                    className={`inline-block w-2 h-2 rounded-full mr-2 ${active ? "bg-teal-500" : "bg-gray-500"}`}
-                  ></span>
-                  <span className={`font-semibold ${active ? "text-teal-400" : "text-gray-400"}`}>
-                    {active ? "Active" : "Inactive"}
-                  </span>
-                </div>
-              </div> */}
+                <p className="font-semibold text-white">
+                  {loadingAmount ? "Loading..." : formatCurrency(contributionAmount)}
+                </p>
+              </div>
             </div>
           </div>
 
-          {/* Right side with actions */}
           <div className="bg-gray-700 p-5 flex flex-row md:flex-col justify-between items-center md:w-48">
-            {/* <div className="text-center mb-4 hidden md:block">
-              <div className="inline-block relative">
-                <svg className="w-16 h-16" viewBox="0 0 36 36">
-                  <circle cx="18" cy="18" r="16" fill="none" className="stroke-gray-600" strokeWidth="2"></circle>
-                  <circle
-                    cx="18"
-                    cy="18"
-                    r="16"
-                    fill="none"
-                    className="stroke-teal-500"
-                    strokeWidth="2"
-                    strokeDasharray={`${progress} 100`}
-                    strokeLinecap="round"
-                    transform="rotate(-90 18 18)"
-                  ></circle>
-                </svg>
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <span className="text-sm font-bold text-teal-300">{progress}%</span>
-                </div>
-              </div>
-              {daysUntilPayout !== null && (
-                <p className="text-xs text-gray-400 mt-1">{daysUntilPayout} days until next payout</p>
-              )}
-            </div> */}
-
             <div className="flex md:flex-col space-x-2 md:space-x-0 md:space-y-2">
               <Link
                 to={`/rotational/${groupId}/payments`}
@@ -143,31 +108,27 @@ const RotationalGroupCard = ({ group, onDelete, view = "grid" }) => {
               >
                 View Payments
               </Link>
-
               <Link
                 to={`/rotational/groups/${groupId}/plan`}
                 className="bg-cyan-600 hover:bg-cyan-700 text-white px-3 py-1.5 rounded-lg text-sm font-medium transition-colors duration-200"
               >
                 Add Plan
               </Link>
-
               {creator && (
-                <>
-                  <div className="flex md:flex-col space-x-2 md:space-x-0 md:space-y-2">
-                    <Link
-                      to={`/rotational/groups/${groupId}`}
-                      className="bg-gray-600 hover:bg-gray-500 text-white px-3 py-1.5 rounded-lg text-sm font-medium transition-colors duration-200"
-                    >
-                      Edit
-                    </Link>
-                    <button
-                      onClick={() => setDeleteDialog(true)}
-                      className="bg-red-900/50 hover:bg-red-800 text-red-300 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors duration-200"
-                    >
-                      Delete
-                    </button>
-                  </div>
-                </>
+                <div className="flex md:flex-col space-x-2 md:space-x-0 md:space-y-2">
+                  <Link
+                    to={`/rotational/groups/${groupId}`}
+                    className="bg-gray-600 hover:bg-gray-500 text-white px-3 py-1.5 rounded-lg text-sm font-medium transition-colors duration-200"
+                  >
+                    Edit
+                  </Link>
+                  <button
+                    onClick={() => setDeleteDialog(true)}
+                    className="bg-red-900/50 hover:bg-red-800 text-red-300 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors duration-200"
+                  >
+                    Delete
+                  </button>
+                </div>
               )}
             </div>
           </div>
@@ -199,7 +160,9 @@ const RotationalGroupCard = ({ group, onDelete, view = "grid" }) => {
               <p className="text-gray-400 text-sm line-clamp-2">{groupDescription}</p>
             </div>
           </div>
-          {creator && <span className="bg-teal-900/50 text-teal-300 text-xs px-2 py-1 rounded-full">Creator</span>}
+          {creator && (
+            <span className="bg-teal-900/50 text-teal-300 text-xs px-2 py-1 rounded-full">Creator</span>
+          )}
         </div>
       </div>
 
@@ -231,17 +194,6 @@ const RotationalGroupCard = ({ group, onDelete, view = "grid" }) => {
               <p className="text-gray-400 text-xs mb-1">Members</p>
               <p className="text-lg font-semibold text-white">{numMembers || 0}</p>
             </div>
-            {/* <div className="bg-gray-700 p-3 rounded-lg">
-              <p className="text-gray-400 text-xs mb-1">Status</p>
-              <div className="flex items-center">
-                <span
-                  className={`inline-block w-2 h-2 rounded-full mr-2 ${active ? "bg-teal-500" : "bg-gray-500"}`}
-                ></span>
-                <span className={`font-semibold ${active ? "text-teal-400" : "text-gray-400"}`}>
-                  {active ? "Active" : "Inactive"}
-                </span>
-              </div>
-            </div> */}
           </div>
         </div>
 
@@ -249,13 +201,10 @@ const RotationalGroupCard = ({ group, onDelete, view = "grid" }) => {
         <div className="grid grid-cols-2 gap-4 mb-4">
           <div className="bg-gray-700 p-3 rounded-lg">
             <p className="text-gray-400 text-xs mb-1">Monthly Contribution</p>
-            <p className="text-lg font-semibold text-white">{}</p>
+            <p className="text-lg font-semibold text-white">
+              {loadingAmount ? "Loading..." : formatCurrency(contributionAmount)}
+            </p>
           </div>
-          {/* <div className="bg-gray-700 p-3 rounded-lg">
-            <p className="text-gray-400 text-xs mb-1">Next Payout</p>
-            <p className="text-sm font-semibold text-white">{formatDate(nextPayoutDate)}</p>
-            {daysUntilPayout !== null && <p className="text-xs text-teal-400">{daysUntilPayout} days remaining</p>}
-          </div> */}
         </div>
 
         {/* Expanded Content */}
@@ -274,10 +223,12 @@ const RotationalGroupCard = ({ group, onDelete, view = "grid" }) => {
                   <span className="text-gray-400">Total Cycle:</span>
                   <span className="text-gray-300">{numMembers} months</span>
                 </div>
-                {/* <div className="flex justify-between text-xs">
+                <div className="flex justify-between text-xs">
                   <span className="text-gray-400">Total Value:</span>
-                  <span className="text-gray-300">{formatCurrency(contributionAmount * numMembers)}</span>
-                </div> */}
+                  <span className="text-gray-300">
+                    {loadingAmount ? "Loading..." : formatCurrency(contributionAmount * numMembers)}
+                  </span>
+                </div>
               </div>
             </div>
           </div>
