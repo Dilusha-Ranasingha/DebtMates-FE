@@ -12,6 +12,7 @@ const UserRegister = () => {
   const [formData, setFormData] = useState({
     username: "",
     password: "",
+    confirmPassword: "",
     email: "",
   })
   const [errors, setErrors] = useState({})
@@ -26,10 +27,34 @@ const UserRegister = () => {
     const { name, value } = e.target
     setFormData({ ...formData, [name]: value })
 
+    // Live validation
+    const newErrors = { ...errors }
+
     if (name === "password") {
       const strength = evaluatePasswordStrength(value)
       setPasswordStrength(strength)
+      // Clear password error if valid
+      if (value && strength.score >= 3) {
+        delete newErrors.password
+      }
+      // Check if confirm password matches
+      if (formData.confirmPassword && value !== formData.confirmPassword) {
+        newErrors.confirmPassword = "Passwords do not match"
+      } else {
+        delete newErrors.confirmPassword
+      }
     }
+
+    if (name === "confirmPassword") {
+      // Validate confirm password
+      if (value && value !== formData.password) {
+        newErrors.confirmPassword = "Passwords do not match"
+      } else {
+        delete newErrors.confirmPassword
+      }
+    }
+
+    setErrors(newErrors)
   }
 
   const validate = () => {
@@ -41,6 +66,10 @@ const UserRegister = () => {
       if (strength.score < 3) {
         newErrors.password = "Password must be at least Medium strength"
       }
+    }
+    if (!formData.confirmPassword) newErrors.confirmPassword = "Confirm password is required"
+    else if (formData.password !== formData.confirmPassword) {
+      newErrors.confirmPassword = "Passwords do not match"
     }
     if (!formData.email) newErrors.email = "Email is required"
     else if (!/\S+@\S+\.\S+/.test(formData.email)) newErrors.email = "Email is invalid"
@@ -224,6 +253,41 @@ const UserRegister = () => {
                 {errors.password && <p className="text-red-500 text-xs mt-1">{errors.password}</p>}
               </div>
 
+              {/* Confirm Password Field */}
+              <div className="space-y-1">
+                <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-300">
+                  Confirm Password
+                </label>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-5 w-5 text-gray-500"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M12 15v2m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"
+                      />
+                    </svg>
+                  </div>
+                  <input
+                    type="password"
+                    id="confirmPassword"
+                    name="confirmPassword"
+                    value={formData.confirmPassword}
+                    onChange={handleChange}
+                    className={`w-full pl-10 pr-4 py-3 bg-gray-700/30 border ${errors.confirmPassword ? "border-red-500" : "border-gray-600"} rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-white placeholder-gray-400 transition-colors duration-200`}
+                    placeholder="Confirm your password"
+                  />
+                </div>
+                {errors.confirmPassword && <p className="text-red-500 text-xs mt-1">{errors.confirmPassword}</p>}
+              </div>
+
               {/* Password Strength Indicator */}
               {formData.password && (
                 <div className="p-3 bg-gray-700/30 rounded-lg border border-gray-600">
@@ -370,7 +434,7 @@ const UserRegister = () => {
                       <path
                         className="opacity-75"
                         fill="currentColor"
-                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                        d="M4 12.seed 8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                       ></path>
                     </svg>
                     Creating Account...
@@ -395,7 +459,7 @@ const UserRegister = () => {
         </div>
 
         {/* Footer */}
-        <p className="text-center text-gray-500 text-xs mt-6">&copy; 2023 DebtMates. All rights reserved.</p>
+        <p className="text-center text-gray-500 text-xs mt-6">© 2023 DebtMates. All rights reserved.</p>
       </div>
       <Toaster />
     </div>
@@ -403,4 +467,3 @@ const UserRegister = () => {
 }
 
 export default UserRegister
-
