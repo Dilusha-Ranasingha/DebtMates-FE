@@ -103,7 +103,7 @@ const RotationalPage = () => {
 
         {/* Stats Cards with Circular Design */}
         <div
-          className={`grid grid-cols-1 md:grid-cols-3 gap-6 mb-10 transition-all duration-700 delay-100 transform ${animate ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"}`}
+          className={`grid grid-cols-1 md:grid-cols-2 gap-6 mb-10 transition-all duration-700 delay-100 transform ${animate ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"}`}
         >
           {/* Total Groups Card */}
           <div className="bg-gray-800 rounded-2xl p-6 shadow-md border border-gray-700 relative overflow-hidden">
@@ -183,7 +183,7 @@ const RotationalPage = () => {
           </div>
 
           {/* Savings Status Card */}
-          <div className="bg-gray-800 rounded-2xl p-6 shadow-md border border-gray-700 relative overflow-hidden">
+          {/* <div className="bg-gray-800 rounded-2xl p-6 shadow-md border border-gray-700 relative overflow-hidden">
             <div className="absolute -right-6 -top-6 w-24 h-24 rounded-full bg-cyan-900/40"></div>
             <div className="relative z-10">
               <div className="flex items-center mb-4">
@@ -220,7 +220,7 @@ const RotationalPage = () => {
                 </div>
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
 
         {/* Search and Filter Section */}
