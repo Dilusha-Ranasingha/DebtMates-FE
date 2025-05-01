@@ -27,38 +27,49 @@ import AddRotationalMembers from './pages/RotationalPlanPages/AddRotationalMembe
 import CreateRotationalPlan from './pages/RotationalPlanPages/CreateRotationalPlan';
 import RotationalPayments from './pages/RotationalPlanPages/RotationalPayments';
 import UploadSlip from './pages/RotationalPlanPages/UploadSlip';
+import DashboardPage from './pages/DashboardPage';
+import About from './pages/About';
+import PrivacyPolicy from './pages/PrivacyPolicy';
+import TermsOfService from './pages/TermsOfService';
 
 function App() {
   return (
     <Router>
       <div className="flex flex-col min-h-screen">
         <Navbar />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/user-login" element={<UserLogin />} />
-          <Route path="/user-register" element={<UserRegister />} />
-          <Route path="/admin-login" element={<AdminLogin />} />
-          <Route path="/admin-register" element={<AdminRegister />} />
-          <Route path="/password-reset" element={<PasswordReset />} />
-          <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
-          <Route path="/admin" element={<ProtectedRoute requiredRole="ADMIN"><AdminDashboard /></ProtectedRoute>} />
-          <Route path="/admin/edit-user/:id" element={<ProtectedRoute requiredRole="ADMIN"><EditUser /></ProtectedRoute>} />
-          <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-          <Route path="/groups/create" element={<ProtectedRoute><CreateGroup /></ProtectedRoute>} />
-          <Route path="/groups/:groupId" element={<ProtectedRoute><GroupDetails /></ProtectedRoute>} />
-          <Route path="/groups/:groupId/debts" element={<DebtSummary />} />
-          <Route path="/groups/:groupId/edit" element={<ProtectedRoute><EditGroup /></ProtectedRoute>} />
-          <Route path="/groups/:groupId/add-members" element={<ProtectedRoute><AddMembers /></ProtectedRoute>} />
-          <Route path="/groups/:groupId/record-debt" element={<ProtectedRoute><RecordDebt /></ProtectedRoute>} />
-          <Route path="/rotational-page" element={<ProtectedRoute><RotationalPage /></ProtectedRoute>} />
-          <Route path="/rotational/create" element={<ProtectedRoute><CreateRotationalGroup /></ProtectedRoute>} />
-          <Route path="/rotational/groups/:groupId" element={<ProtectedRoute><EditRotationalGroup /></ProtectedRoute>} />
-          <Route path="/rotational/groups/:groupId/members" element={<ProtectedRoute><AddRotationalMembers /></ProtectedRoute>} />
-          <Route path="/rotational/groups/:groupId/plan" element={<ProtectedRoute><CreateRotationalPlan /></ProtectedRoute>} />
-          <Route path="/rotational/:groupId/payments" element={<ProtectedRoute><RotationalPayments /></ProtectedRoute>} />
-          <Route path="/rotational/payments/:paymentId/upload-slip" element={<ProtectedRoute><UploadSlip /></ProtectedRoute>} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+          <main className="flex-grow pt-16">
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/dashboardPage" element={<DashboardPage />} />
+              <Route path="/user-login" element={<UserLogin />} />
+              <Route path="/user-register" element={<UserRegister />} />
+              <Route path="/admin-login" element={<AdminLogin />} />
+              <Route path="/admin-register" element={<AdminRegister />} />
+              <Route path="/password-reset" element={<PasswordReset />} />
+              <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+              <Route path="/admin" element={<ProtectedRoute requiredRole="ADMIN"><AdminDashboard /></ProtectedRoute>} />
+              <Route path="/admin/edit-user/:id" element={<ProtectedRoute requiredRole="ADMIN"><EditUser /></ProtectedRoute>} />
+              <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+              <Route path="/groups/create" element={<ProtectedRoute><CreateGroup /></ProtectedRoute>} />
+              <Route path="/groups/:groupId" element={<ProtectedRoute><GroupDetails /></ProtectedRoute>} />
+              <Route path="/groups/:groupId/debts" element={<DebtSummary />} />
+              <Route path="/groups/:groupId/edit" element={<ProtectedRoute><EditGroup /></ProtectedRoute>} />
+              <Route path="/groups/:groupId/add-members" element={<ProtectedRoute><AddMembers /></ProtectedRoute>} />
+              <Route path="/groups/:groupId/record-debt" element={<ProtectedRoute><RecordDebt /></ProtectedRoute>} />
+              <Route path="/rotational-page" element={<ProtectedRoute><RotationalPage /></ProtectedRoute>} />
+              <Route path="/rotational/create" element={<ProtectedRoute><CreateRotationalGroup /></ProtectedRoute>} />
+              <Route path="/rotational/groups/:groupId" element={<ProtectedRoute><EditRotationalGroup /></ProtectedRoute>} />
+              <Route path="/rotational/groups/:groupId/members" element={<ProtectedRoute><AddRotationalMembers /></ProtectedRoute>} />
+              <Route path="/rotational/groups/:groupId/plan" element={<ProtectedRoute><CreateRotationalPlan /></ProtectedRoute>} />
+              <Route path="/rotational/:groupId/payments" element={<ProtectedRoute><RotationalPayments /></ProtectedRoute>} />
+              <Route path="/rotational/payments/:paymentId/upload-slip" element={<ProtectedRoute><UploadSlip /></ProtectedRoute>} />
+              <Route path="/aboutUs" element={<About/>} />
+              <Route path="/TermsofService" element={<TermsOfService />} />
+              <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </main>
         <Footer />
       </div>
     </Router>

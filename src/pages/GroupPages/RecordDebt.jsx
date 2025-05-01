@@ -9,13 +9,15 @@ const RecordDebt = () => {
   const { groupId } = useParams()
   const navigate = useNavigate()
   const [members, setMembers] = useState([])
-  const [formData, setFormData] = useState({ totalBill: ""})
+  const [formData, setFormData] = useState({ totalBill: "" })
   const [contributions, setContributions] = useState({})
   const [errors, setErrors] = useState({})
   const [isCreator, setIsCreator] = useState(false)
   const [loading, setLoading] = useState(true)
   const [submitting, setSubmitting] = useState(false)
   const [fetchError, setFetchError] = useState(null)
+  const [animate, setAnimate] = useState(false)
+  const [groupName, setGroupName] = useState("")
 
   // Calculate total contributions
   const totalContributions = Object.values(contributions).reduce(
@@ -52,16 +54,20 @@ const RecordDebt = () => {
           throw new Error("Group not found in user's groups")
         }
         setIsCreator(group.isCreator)
+        setGroupName(group.groupName || "Group")
       } catch (error) {
         setFetchError(error.response?.data?.message || "Failed to load group members")
       } finally {
         setLoading(false)
+        // Trigger animation after data is loaded
+        setTimeout(() => {
+          setAnimate(true)
+        }, 100)
       }
     }
     fetchMembers()
   }, [groupId, navigate])
 
- 
   useEffect(() => {
     const newErrors = {}
 
@@ -75,7 +81,9 @@ const RecordDebt = () => {
 
     // Check if contributions match total bill when both are valid
     if (totalBill > 0 && totalContributions > 0 && Math.abs(totalContributions - totalBill) > 0.01) {
-      newErrors.contributions = `Total contributions (${totalContributions.toFixed(2)}) must equal the total bill (${totalBill.toFixed(2)})`
+      newErrors.contributions = `Total contributions (${totalContributions.toFixed(
+        2,
+      )}) must equal the total bill (${totalBill.toFixed(2)})`
     }
 
     setErrors(newErrors)
@@ -136,10 +144,10 @@ const RecordDebt = () => {
       validationErrors.totalBill = "Total bill must be a positive number"
     }
 
-  
-
     if (Math.abs(totalContributions - totalBill) > 0.01) {
-      validationErrors.contributions = `Total contributions (${totalContributions.toFixed(2)}) must equal the total bill (${totalBill.toFixed(2)})`
+      validationErrors.contributions = `Total contributions (${totalContributions.toFixed(
+        2,
+      )}) must equal the total bill (${totalBill.toFixed(2)})`
     }
 
     if (Object.keys(validationErrors).length > 0) {
@@ -169,20 +177,23 @@ const RecordDebt = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-100 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+      <div className="min-h-screen bg-[#0f111a] flex items-center justify-center">
+        <div className="animate-pulse flex flex-col items-center">
+          <div className="w-16 h-16 border-4 border-green-500 border-t-transparent rounded-full animate-spin mb-4"></div>
+          <p className="text-green-400">Loading group data...</p>
+        </div>
       </div>
     )
   }
 
   if (fetchError) {
     return (
-      <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
-        <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
-          <div className="flex items-center justify-center mb-6 text-red-500">
+      <div className="min-h-screen bg-[#0f111a] text-gray-100 flex items-center justify-center p-4">
+        <div className="bg-gray-800/50 p-8 rounded-xl border border-gray-700/50 shadow-lg w-full max-w-md">
+          <div className="flex items-center justify-center mb-6 text-red-400">
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className="h-12 w-12"
+              className="h-16 w-16"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -195,8 +206,8 @@ const RecordDebt = () => {
               />
             </svg>
           </div>
-          <h2 className="text-2xl font-bold text-red-700 mb-4 text-center">Error</h2>
-          <p className="text-gray-600 text-center mb-6">{fetchError}</p>
+          <h2 className="text-2xl font-bold text-red-400 mb-4 text-center">Error</h2>
+          <p className="text-gray-300 text-center mb-6">{fetchError}</p>
           <button
             onClick={() => navigate("/dashboard")}
             className="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition duration-200"
@@ -210,12 +221,12 @@ const RecordDebt = () => {
 
   if (!isCreator) {
     return (
-      <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
-        <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
-          <div className="flex items-center justify-center mb-6 text-yellow-500">
+      <div className="min-h-screen bg-[#0f111a] text-gray-100 flex items-center justify-center p-4">
+        <div className="bg-gray-800/50 p-8 rounded-xl border border-gray-700/50 shadow-lg w-full max-w-md">
+          <div className="flex items-center justify-center mb-6 text-yellow-400">
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className="h-12 w-12"
+              className="h-16 w-16"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -228,8 +239,8 @@ const RecordDebt = () => {
               />
             </svg>
           </div>
-          <h2 className="text-2xl font-bold text-yellow-700 mb-4 text-center">Not Authorized</h2>
-          <p className="text-gray-600 text-center mb-6">Only the group creator can record debts.</p>
+          <h2 className="text-2xl font-bold text-yellow-400 mb-4 text-center">Not Authorized</h2>
+          <p className="text-gray-300 text-center mb-6">Only the group creator can record debts.</p>
           <button
             onClick={() => navigate("/dashboard")}
             className="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition duration-200"
@@ -242,12 +253,33 @@ const RecordDebt = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 py-8 px-4">
-      <div className="max-w-lg mx-auto">
-        <div className="bg-white rounded-xl shadow-lg overflow-hidden">
+    <div className="min-h-screen bg-[#0f111a] text-gray-100 py-8 px-4">
+      <div
+        className={`max-w-lg mx-auto transition-all duration-700 transform ${animate ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"}`}
+      >
+        <div className="bg-gray-800/50 rounded-xl border border-gray-700/50 shadow-lg overflow-hidden">
           {/* Header */}
-          <div className="bg-blue-600 px-6 py-4">
-            <h2 className="text-2xl font-bold text-white text-center">Record Debt</h2>
+          <div className="bg-gradient-to-r from-green-600 to-green-700 px-6 py-5">
+            <div className="flex items-center mb-1">
+              <button
+                onClick={() => navigate("/dashboard")}
+                className="mr-4 p-1.5 rounded-lg bg-green-500/20 hover:bg-green-500/30 transition-colors duration-200"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-5 w-5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                </svg>
+              </button>
+              <h2 className="text-2xl font-bold text-white">Record Debt</h2>
+            </div>
+            <p className="text-green-100 text-sm ml-10">
+              Recording debt for: <span className="font-medium">{groupName}</span>
+            </p>
           </div>
 
           {/* Form */}
@@ -255,11 +287,11 @@ const RecordDebt = () => {
             <div className="space-y-6">
               {/* Total Bill Field */}
               <div className="space-y-1">
-                <label htmlFor="totalBill" className="block text-sm font-medium text-gray-700">
+                <label htmlFor="totalBill" className="block text-sm font-medium text-gray-300">
                   Total Bill Amount
                 </label>
                 <div className="relative">
-                  <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">$</span>
+                  <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">$</span>
                   <input
                     type="number"
                     id="totalBill"
@@ -269,12 +301,14 @@ const RecordDebt = () => {
                     placeholder="0.00"
                     step="0.01"
                     min="0"
-                    className={`w-full pl-8 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
-                      errors.totalBill ? "border-red-500" : "border-gray-300"
-                    }`}
+                    className={`w-full pl-8 pr-4 py-3 bg-gray-700/30 border rounded-lg focus:ring-2 focus:outline-none ${
+                      errors.totalBill
+                        ? "border-red-500 focus:ring-red-500"
+                        : "border-gray-600 focus:ring-green-500 focus:border-green-500"
+                    } text-white placeholder-gray-500`}
                   />
                 </div>
-                {errors.totalBill && <p className="text-red-500 text-sm">{errors.totalBill}</p>}
+                {errors.totalBill && <p className="text-red-400 text-sm">{errors.totalBill}</p>}
               </div>
 
               {/* Split Evenly Button */}
@@ -282,7 +316,7 @@ const RecordDebt = () => {
                 <button
                   type="button"
                   onClick={splitEvenly}
-                  className="px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-800 rounded-lg text-sm font-medium transition duration-200"
+                  className="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-gray-200 rounded-lg text-sm font-medium transition duration-200"
                 >
                   Split Evenly
                 </button>
@@ -291,33 +325,33 @@ const RecordDebt = () => {
               {/* Contributions Section */}
               <div className="space-y-4">
                 <div className="flex justify-between items-center">
-                  <h3 className="text-lg font-bold text-gray-800">Member Contributions</h3>
-                  <div className={`text-sm font-medium ${remainingAmount === 0 ? "text-green-600" : "text-red-600"}`}>
+                  <h3 className="text-lg font-bold text-white">Member Contributions</h3>
+                  <div className={`text-sm font-medium ${remainingAmount === 0 ? "text-green-400" : "text-red-400"}`}>
                     {remainingAmount === 0 ? "Balanced ✓" : `Remaining: $${Math.abs(remainingAmount).toFixed(2)}`}
                   </div>
                 </div>
 
                 {errors.contributions && (
-                  <div className="p-3 bg-red-50 border border-red-200 rounded-lg">
-                    <p className="text-red-600 text-sm">{errors.contributions}</p>
+                  <div className="p-3 bg-red-900/30 border border-red-800/50 rounded-lg">
+                    <p className="text-red-400 text-sm">{errors.contributions}</p>
                   </div>
                 )}
 
-                <div className="bg-gray-50 rounded-lg p-4 space-y-3">
+                <div className="bg-gray-700/30 rounded-lg p-4 space-y-3 border border-gray-600">
                   {members.map((member) => (
                     <div key={member.id} className="flex items-center space-x-3">
-                      <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
-                        <span className="text-blue-600 font-bold text-sm">
+                      <div className="w-10 h-10 bg-green-900/50 rounded-full flex items-center justify-center flex-shrink-0 border border-green-700/50">
+                        <span className="text-green-400 font-bold text-sm">
                           {member.username.charAt(0).toUpperCase()}
                         </span>
                       </div>
                       <div className="flex-grow">
-                        <label htmlFor={`member-${member.id}`} className="block text-sm font-medium text-gray-700">
+                        <label htmlFor={`member-${member.id}`} className="block text-sm font-medium text-gray-300">
                           {member.username}
                         </label>
                       </div>
                       <div className="relative w-32">
-                        <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">$</span>
+                        <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">$</span>
                         <input
                           type="number"
                           id={`member-${member.id}`}
@@ -326,7 +360,7 @@ const RecordDebt = () => {
                           placeholder="0.00"
                           step="0.01"
                           min="0"
-                          className="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-right"
+                          className="w-full pl-8 pr-3 py-2 bg-gray-700/50 border border-gray-600 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 focus:outline-none text-right text-white placeholder-gray-500"
                         />
                       </div>
                     </div>
@@ -335,69 +369,80 @@ const RecordDebt = () => {
               </div>
 
               {/* Summary */}
-              <div className="bg-blue-50 rounded-lg p-4">
+              <div className="bg-green-900/20 rounded-lg p-4 border border-green-800/30">
                 <div className="flex justify-between items-center text-sm">
-                  <span className="font-medium text-gray-700">Total Bill:</span>
-                  <span className="font-bold">${totalBill.toFixed(2)}</span>
+                  <span className="font-medium text-gray-300">Total Bill:</span>
+                  <span className="font-bold text-white">${totalBill.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between items-center text-sm mt-1">
-                  <span className="font-medium text-gray-700">Total Contributions:</span>
-                  <span className={`font-bold ${totalContributions !== totalBill ? "text-red-600" : "text-green-600"}`}>
+                  <span className="font-medium text-gray-300">Total Contributions:</span>
+                  <span className={`font-bold ${totalContributions !== totalBill ? "text-red-400" : "text-green-400"}`}>
                     ${totalContributions.toFixed(2)}
                   </span>
                 </div>
+                {totalContributions !== totalBill && totalBill > 0 && (
+                  <div className="mt-2 pt-2 border-t border-green-800/30">
+                    <div className="flex justify-between items-center text-sm">
+                      <span className="font-medium text-red-400">Difference:</span>
+                      <span className="font-bold text-red-400">
+                        ${Math.abs(totalContributions - totalBill).toFixed(2)}
+                      </span>
+                    </div>
+                  </div>
+                )}
               </div>
 
-              {/* Submit Button */}
-              <button
-                type="submit"
-                disabled={
-                  submitting || Object.keys(errors).length > 0 || totalBill <= 0 || totalContributions !== totalBill
-                }
-                className={`w-full py-3 rounded-lg font-medium text-white transition duration-200 flex items-center justify-center
-                  ${
-                    submitting || Object.keys(errors).length > 0 || totalBill <= 0 || totalContributions !== totalBill
-                      ? "bg-gray-400 cursor-not-allowed"
-                      : "bg-blue-600 hover:bg-blue-700"
-                  }`}
-              >
-                {submitting ? (
-                  <>
-                    <svg
-                      className="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                    >
-                      <circle
-                        className="opacity-25"
-                        cx="12"
-                        cy="12"
-                        r="10"
-                        stroke="currentColor"
-                        strokeWidth="4"
-                      ></circle>
-                      <path
-                        className="opacity-75"
-                        fill="currentColor"
-                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                      ></path>
-                    </svg>
-                    Recording...
-                  </>
-                ) : (
-                  "Record Debt"
-                )}
-              </button>
+              {/* Action Buttons */}
+              <div className="flex space-x-4 pt-2">
+                <button
+                  type="button"
+                  onClick={() => navigate("/dashboard")}
+                  className="w-1/2 py-3 bg-gray-700 hover:bg-gray-600 text-white font-medium rounded-lg transition duration-200"
+                >
+                  Cancel
+                </button>
 
-              {/* Cancel Button */}
-              <button
-                type="button"
-                onClick={() => navigate("/dashboard")}
-                className="w-full py-2 text-gray-600 hover:text-gray-800 font-medium transition duration-200"
-              >
-                Cancel
-              </button>
+                <button
+                  type="submit"
+                  disabled={
+                    submitting || Object.keys(errors).length > 0 || totalBill <= 0 || totalContributions !== totalBill
+                  }
+                  className={`w-1/2 py-3 rounded-lg font-medium text-white transition duration-200 flex items-center justify-center
+                    ${
+                      submitting || Object.keys(errors).length > 0 || totalBill <= 0 || totalContributions !== totalBill
+                        ? "bg-green-700/50 text-green-300 cursor-not-allowed"
+                        : "bg-green-600 hover:bg-green-700"
+                    }`}
+                >
+                  {submitting ? (
+                    <>
+                      <svg
+                        className="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                      >
+                        <circle
+                          className="opacity-25"
+                          cx="12"
+                          cy="12"
+                          r="10"
+                          stroke="currentColor"
+                          strokeWidth="4"
+                        ></circle>
+                        <path
+                          className="opacity-75"
+                          fill="currentColor"
+                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                        ></path>
+                      </svg>
+                      Recording...
+                    </>
+                  ) : (
+                    "Record Debt"
+                  )}
+                </button>
+              </div>
             </div>
           </form>
         </div>
