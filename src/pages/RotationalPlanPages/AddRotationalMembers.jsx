@@ -134,7 +134,7 @@ const AddRotationalMembers = () => {
           <div className="space-y-2">
             <label className="block text-sm font-medium text-gray-300">Select Members to Add</label>
             <div className="bg-gray-700/30 border border-gray-600 rounded-lg p-4">
-              <MemberSelector onSelect={setSelectedMembers} selectedMembers={selectedMembers} />
+            <span className="text-teal-400"><MemberSelector onSelect={setSelectedMembers} selectedMembers={selectedMembers} /></span>
             </div>
 
             {selectedMembers.length > 0 && (
