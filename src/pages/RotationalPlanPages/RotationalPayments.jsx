@@ -1,9 +1,8 @@
-"use client"
-
 import { useState, useEffect } from "react"
 import { useParams, useNavigate } from "react-router-dom"
 import { getRotationalPayments, uploadPaymentSlip } from "../../services/api"
 import toast from "react-hot-toast"
+import { jsPDF } from "jspdf" // Add this import for PDF generation
 
 const RotationalPayments = () => {
   const { groupId } = useParams()
@@ -116,6 +115,172 @@ const RotationalPayments = () => {
     }
   }
 
+  // Generate PDF report
+  const generatePDF = () => {
+    const doc = new jsPDF()
+    let yPosition = 20
+
+    // Add styling - colors
+    const primaryColor = [0, 128, 128] // Teal
+    const secondaryColor = [100, 100, 100] // Dark gray
+    const accentColor = [0, 150, 136] // Light teal
+    const successColor = [46, 204, 113] // Green
+    const warningColor = [230, 126, 34] // Orange
+    const dangerColor = [231, 76, 60] // Red
+
+    // Title with styling
+    doc.setFontSize(24)
+    doc.setTextColor(primaryColor[0], primaryColor[1], primaryColor[2])
+    doc.setFont("helvetica", "bold")
+    doc.text("Rotational Payments Report", 20, yPosition)
+    yPosition += 15
+
+    // Add a horizontal line
+    doc.setDrawColor(accentColor[0], accentColor[1], accentColor[2])
+    doc.setLineWidth(0.5)
+    doc.line(20, yPosition, 190, yPosition)
+    yPosition += 10
+
+    // Group info
+    doc.setFontSize(14)
+    doc.setTextColor(secondaryColor[0], secondaryColor[1], secondaryColor[2])
+    doc.setFont("helvetica", "normal")
+    doc.text(`Group: ${groupName}`, 20, yPosition)
+    doc.text(`Group ID: ${groupId}`, 120, yPosition)
+    yPosition += 10
+
+    // Summary section
+    doc.setFontSize(14)
+    doc.setTextColor(accentColor[0], accentColor[1], accentColor[2])
+    doc.setFont("helvetica", "bold")
+    doc.text("Summary", 20, yPosition)
+    yPosition += 10
+
+    // Summary data
+    doc.setFontSize(12)
+    doc.setTextColor(secondaryColor[0], secondaryColor[1], secondaryColor[2])
+    doc.setFont("helvetica", "normal")
+
+    // Create summary box
+    doc.setFillColor(245, 245, 245)
+    doc.roundedRect(20, yPosition - 5, 170, 35, 3, 3, "F")
+
+    doc.text(`Total Months: ${Object.keys(groupedPayments).length}`, 30, yPosition)
+    doc.text(`Total Payments: ${payments.length}`, 100, yPosition)
+    yPosition += 10
+
+    const totalAmount = payments.reduce((sum, payment) => sum + payment.amount, 0)
+    doc.setFont("helvetica", "bold")
+    doc.text(`Total Amount: ${formatCurrency(totalAmount)}`, 30, yPosition)
+    yPosition += 20
+
+    // Iterate through each month
+    Object.keys(groupedPayments)
+      .sort((a, b) => a - b)
+      .forEach((month, index) => {
+        // Check if we need a new page
+        if (yPosition > 250) {
+          doc.addPage()
+          yPosition = 20
+
+          // Add header to new page
+          doc.setFontSize(12)
+          doc.setTextColor(secondaryColor[0], secondaryColor[1], secondaryColor[2])
+          doc.setFont("helvetica", "italic")
+          doc.text(`Rotational Payments Report - ${groupName} (continued)`, 20, yPosition)
+          yPosition += 10
+        }
+
+        // Month header
+        doc.setFillColor(primaryColor[0], primaryColor[1], primaryColor[2], 0.1)
+        doc.roundedRect(20, yPosition - 5, 170, 20, 3, 3, "F")
+
+        doc.setFontSize(14)
+        doc.setTextColor(primaryColor[0], primaryColor[1], primaryColor[2])
+        doc.setFont("helvetica", "bold")
+        doc.text(`Month ${month}`, 25, yPosition + 5)
+        doc.setFontSize(12)
+        doc.text(`Recipient: ${groupedPayments[month].recipient}`, 80, yPosition + 5)
+        yPosition += 20
+
+        // Table header
+        doc.setFillColor(220, 220, 220)
+        doc.rect(20, yPosition - 5, 170, 12, "F")
+
+        doc.setFontSize(10)
+        doc.setTextColor(80, 80, 80)
+        doc.setFont("helvetica", "bold")
+        doc.text("Payer", 25, yPosition)
+        doc.text("Amount", 75, yPosition)
+        doc.text("Status", 125, yPosition)
+        yPosition += 10
+
+        // Table rows
+        groupedPayments[month].payments.forEach((payment, paymentIndex) => {
+          // Alternate row background
+          if (paymentIndex % 2 === 0) {
+            doc.setFillColor(245, 245, 245)
+            doc.rect(20, yPosition - 5, 170, 12, "F")
+          }
+
+          doc.setFontSize(10)
+          doc.setFont("helvetica", "normal")
+          doc.setTextColor(80, 80, 80)
+          doc.text(payment.payer.username, 25, yPosition)
+          doc.text(formatCurrency(payment.amount), 75, yPosition)
+
+          // Status with color
+          switch (payment.status?.toLowerCase()) {
+            case "paid":
+              doc.setTextColor(successColor[0], successColor[1], successColor[2])
+              break
+            case "pending":
+              doc.setTextColor(warningColor[0], warningColor[1], warningColor[2])
+              break
+            case "overdue":
+              doc.setTextColor(dangerColor[0], dangerColor[1], dangerColor[2])
+              break
+            default:
+              doc.setTextColor(secondaryColor[0], secondaryColor[1], secondaryColor[2])
+          }
+
+          doc.setFont("helvetica", "bold")
+          doc.text(payment.status || "Unknown", 125, yPosition)
+          yPosition += 12
+
+          // Check if we need a new page
+          if (yPosition > 270) {
+            doc.addPage()
+            yPosition = 20
+
+            // Add header to new page
+            doc.setFontSize(12)
+            doc.setTextColor(secondaryColor[0], secondaryColor[1], secondaryColor[2])
+            doc.setFont("helvetica", "italic")
+            doc.text(`Rotational Payments Report - ${groupName} (continued)`, 20, yPosition)
+            yPosition += 15
+          }
+        })
+
+        // Add space between months
+        yPosition += 10
+      })
+
+    // Add footer with date
+    const currentDate = new Date().toLocaleDateString()
+    doc.setFontSize(10)
+    doc.setTextColor(150, 150, 150)
+    doc.setFont("helvetica", "italic")
+    doc.text(`Generated on ${currentDate}`, 20, 280)
+    doc.text("Page 1", 180, 280)
+
+    // Save the PDF
+    doc.save(`Rotational_Payments_${groupId}.pdf`)
+
+    // Show success message
+    toast.success("PDF report generated successfully")
+  }
+
   if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800 flex items-center justify-center">
@@ -156,24 +321,11 @@ const RotationalPayments = () => {
               </div>
             </div>
             <div className="mt-4 md:mt-0 flex space-x-3">
+              {/* Add PDF Report Button */}
               <button
-                onClick={() => navigate(`/rotational/${groupId}/add-plan`)}
-                className="bg-teal-600 hover:bg-teal-700 text-white px-4 py-2 rounded-lg font-medium transition-colors duration-200 flex items-center"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-5 w-5 mr-2"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                </svg>
-                Add Plan
-              </button>
-              <button
-                onClick={() => navigate(`/rotational/${groupId}/members`)}
-                className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors duration-200 flex items-center"
+                onClick={generatePDF}
+                className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg font-medium transition-colors duration-200 flex items-center"
+                disabled={payments.length === 0}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -186,11 +338,12 @@ const RotationalPayments = () => {
                     strokeLinecap="round"
                     strokeLinejoin="round"
                     strokeWidth={2}
-                    d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"
+                    d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
                   />
                 </svg>
-                Manage Members
+                Download PDF Report
               </button>
+              
             </div>
           </div>
 
