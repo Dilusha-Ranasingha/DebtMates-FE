@@ -1,4 +1,3 @@
-// src/services/api.js
 import axios from 'axios';
 
 const API_URL = 'http://localhost:8080/api';
@@ -31,6 +30,8 @@ export const getAllUsers = (page) => api.get(`/admin/users?page=${page}`);
 export const getAllAdmins = (page) => api.get(`/admin/admins?page=${page}`);
 export const getUserById = (id) => api.get(`/admin/users/${id}`);
 export const updateUser = (id, data) => api.put(`/admin/users/${id}`, data);
+export const updateAdmin = (id, data) => api.put(`/admin/admins/${id}`, data);
+export const deleteAdmin = (id) => api.delete(`/admin/admins/${id}`);
 export const deleteUser = (id) => api.delete(`/admin/users/${id}`);
 export const requestPasswordReset = (data) => api.post('/auth/password-reset/request', data);
 export const confirmPasswordReset = (data) => api.post('/auth/password-reset/confirm', data);

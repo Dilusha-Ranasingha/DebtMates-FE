@@ -149,6 +149,28 @@ const AdminRegister = () => {
           <p className="text-gray-400 mt-1">Create your admin account</p>
         </div>
 
+        {/* Back Button */}
+        <button
+          onClick={() => navigate(-1)}
+          className="mb-6 flex items-center text-blue-400 hover:text-blue-300 transition-colors duration-200"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-5 w-5 mr-2 transform rotate-180"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M9 5l7 7-7 7"
+            />
+          </svg>
+          Back to Previous Page
+        </button>
+
         {/* Register Card */}
         <div className="bg-gray-800/50 rounded-xl border border-gray-700/50 shadow-lg overflow-hidden backdrop-blur-sm">
           <div className="p-6 sm:p-8">
