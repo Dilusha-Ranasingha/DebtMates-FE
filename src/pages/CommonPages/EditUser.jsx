@@ -1,10 +1,9 @@
-// src/pages/EditUser.jsx
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import toast, { Toaster } from 'react-hot-toast';
 import Swal from 'sweetalert2';
 import InputField from '../../components/InputField';
-import { getUserById, updateUser } from '../../services/api';
+import { getUserById, updateUser, updateAdmin } from '../../services/api';
 
 const EditUser = () => {
   const { id } = useParams();
@@ -16,6 +15,7 @@ const EditUser = () => {
   });
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
+  const [isAdminEdit, setIsAdminEdit] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -37,6 +37,8 @@ const EditUser = () => {
         email: response.data.email,
         role: response.data.role,
       });
+      // Check if this is an admin being edited
+      setIsAdminEdit(response.data.role === 'ADMIN');
     } catch (error) {
       toast.error(error.response?.data || 'Failed to fetch user');
       navigate('/admin');
@@ -69,15 +71,25 @@ const EditUser = () => {
 
     setLoading(true);
     try {
-      await updateUser(id, formData);
-      // toast.success('User updated successfully');
-      Swal.fire({
-        position: "top-end",
-        icon: "success",
-        title: "User updated successfully",
-        showConfirmButton: false,
-        timer: 1500
-      });
+      if (isAdminEdit) {
+        await updateAdmin(id, formData);
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: "Admin updated successfully",
+          showConfirmButton: false,
+          timer: 1500
+        });
+      } else {
+        await updateUser(id, formData);
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: "User updated successfully",
+          showConfirmButton: false,
+          timer: 1500
+        });
+      }
       navigate('/admin');
     } catch (error) {
       toast.error(error.response?.data || 'Failed to update user');
@@ -90,7 +102,7 @@ const EditUser = () => {
     <div className="min-h-screen bg-gray-100 flex items-center justify-center">
       <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
         <h2 className="text-2xl font-bold text-blue-700 mb-6 text-center">
-          Edit User
+          {isAdminEdit ? 'Edit Admin' : 'Edit User'}
         </h2>
         {loading ? (
           <div className="flex justify-center">
@@ -136,12 +148,12 @@ const EditUser = () => {
               disabled={loading}
               className="w-full btn-primary"
             >
-              Update User
+              {isAdminEdit ? 'Update Admin' : 'Update User'}
             </button>
           </form>
         )}
       </div>
-      
+      <Toaster />
     </div>
   );
 };
