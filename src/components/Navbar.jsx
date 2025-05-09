@@ -45,7 +45,8 @@ const Navbar = () => {
     } finally {
       localStorage.removeItem('token');
       localStorage.removeItem('role');
-      navigate(isAdmin ? '/admin-login' : '/');
+      // Navigate based on role: Admin to admin-login, User to user-login
+      navigate(isAdmin ? '/admin-login' : '/user-login');
     }
   };
 
@@ -61,37 +62,51 @@ const Navbar = () => {
         </Link>
         <div className="space-x-4">
           {token ? (
-            <>
-              <Link to="/dashboard" className="text-gray-300 hover:text-blue-400 transition-colors duration-300 relative group">
-                Debts
-                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-400 transition-all duration-300 group-hover:w-full"></span>
-              </Link>
-              <Link to="/rotational-page" className="text-gray-300 hover:text-blue-400 transition-colors duration-300 relative group">
-                Rotational Savings
-                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-400 transition-all duration-300 group-hover:w-full"></span>
-              </Link>
-              <Link to="/savings" className="text-gray-300 hover:text-blue-400 transition-colors duration-300 relative group">
-                Personal Savings
-                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-400 transition-all duration-300 group-hover:w-full"></span>
-              </Link>
-              <Link to="/profile" className="text-gray-300 hover:text-blue-400 transition-colors duration-300 relative group">
-                Profile
-                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-400 transition-all duration-300 group-hover:w-full"></span>
-              </Link>
-              {isAdmin && (
+            isAdmin ? (
+              <>
                 <Link to="/admin" className="text-gray-300 hover:text-blue-400 transition-colors duration-300 relative group">
-                  Admin
+                  Admin Dashboard
                   <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-400 transition-all duration-300 group-hover:w-full"></span>
                 </Link>
-              )}
-              <button
-                onClick={handleLogout}
-                className="text-gray-300 hover:text-blue-400 transition-colors duration-300 relative group"
-              >
-                Logout
-                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-400 transition-all duration-300 group-hover:w-full"></span>
-              </button>
-            </>
+                <Link to="/profile" className="text-gray-300 hover:text-blue-400 transition-colors duration-300 relative group">
+                  Profile
+                  <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-400 transition-all duration-300 group-hover:w-full"></span>
+                </Link>
+                <button
+                  onClick={handleLogout}
+                  className="text-gray-300 hover:text-blue-400 transition-colors duration-300 relative group"
+                >
+                  Logout
+                  <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-400 transition-all duration-300 group-hover:w-full"></span>
+                </button>
+              </>
+            ) : (
+              <>
+                <Link to="/dashboard" className="text-gray-300 hover:text-blue-400 transition-colors duration-300 relative group">
+                  Debts
+                  <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-400 transition-all duration-300 group-hover:w-full"></span>
+                </Link>
+                <Link to="/rotational-page" className="text-gray-300 hover:text-blue-400 transition-colors duration-300 relative group">
+                  Rotational Savings
+                  <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-400 transition-all duration-300 group-hover:w-full"></span>
+                </Link>
+                <Link to="/savings" className="text-gray-300 hover:text-blue-400 transition-colors duration-300 relative group">
+                  Personal Savings
+                  <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-400 transition-all duration-300 group-hover:w-full"></span>
+                </Link>
+                <Link to="/profile" className="text-gray-300 hover:text-blue-400 transition-colors duration-300 relative group">
+                  Profile
+                  <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-400 transition-all duration-300 group-hover:w-full"></span>
+                </Link>
+                <button
+                  onClick={handleLogout}
+                  className="text-gray-300 hover:text-blue-400 transition-colors duration-300 relative group"
+                >
+                  Logout
+                  <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-400 transition-all duration-300 group-hover:w-full"></span>
+                </button>
+              </>
+            )
           ) : (
             <>
               <Link to="/user-login" className="text-gray-300 hover:text-blue-400 transition-colors duration-300 px-4 py-2 rounded-lg hover:bg-blue-900/30">
