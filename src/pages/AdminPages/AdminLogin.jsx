@@ -197,15 +197,7 @@ const AdminLogin = () => {
                 Reset it
               </a>
             </p>
-            <p className="mt-2 text-center text-gray-400">
-              Don't have an account?{' '}
-              <a
-                href="/admin-register"
-                className="text-blue-400 hover:text-blue-300 font-medium transition-colors duration-200"
-              >
-                Register
-              </a>
-            </p>
+            
           </div>
         </div>
         {/* Footer */}
