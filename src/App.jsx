@@ -31,6 +31,10 @@ import DashboardPage from './pages/DashboardPage';
 import About from './pages/About';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import TermsOfService from './pages/TermsOfService';
+import PersonalSavaing from './pages/PersonalSavingPages/PersonalSavaing';
+import CreatePlan from './pages/PersonalSavingPages/CreatePlan';
+import UpdatePlan from './pages/PersonalSavingPages/UpdatePlan';
+import ViewPlan from './pages/PersonalSavingPages/ViewPlan';
 
 function App() {
   return (
@@ -66,7 +70,11 @@ function App() {
               <Route path="/aboutUs" element={<About/>} />
               <Route path="/TermsofService" element={<TermsOfService />} />
               <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-
+              <Route path="/personal-saving" element={<ProtectedRoute><PersonalSavaing /></ProtectedRoute>} />
+              <Route path="/create-plan" element={<ProtectedRoute><CreatePlan/></ProtectedRoute>} />
+              <Route path="/update-plan/:id" element={<ProtectedRoute><UpdatePlan/></ProtectedRoute>} />
+              <Route path="/view-plan/:id" element={<ProtectedRoute><ViewPlan/></ProtectedRoute>} />
+          
               <Route path="*" element={<NotFound />} />
             </Routes>
           </main>
