@@ -236,7 +236,7 @@ const DashboardPage = () => {
                     </Link>
                   ))}
                   {groups.length > 3 && (
-                    <Link to="/groups" className="text-blue-400 text-sm flex items-center hover:underline">
+                    <Link to="/dashboard" className="text-blue-400 text-sm flex items-center hover:underline">
                       <span>View all groups</span>
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -267,15 +267,15 @@ const DashboardPage = () => {
                 <div className="space-y-3">
                   {rotationalGroups.slice(0, 3).map((group, index) => (
                     <Link
-                      key={group.id || index}
-                      to={`/rotational/${group.id}`}
+                      key={group.groupId || index}
+                      to={`/rotational/${group.groupId}/payments`}
                       className="flex items-center p-3 bg-gray-700/30 hover:bg-gray-700/50 rounded-lg transition-colors duration-200"
                     >
                       <div className="w-10 h-10 rounded-full bg-green-500/20 flex items-center justify-center mr-3">
-                        <span className="font-semibold text-green-400">{group.name?.charAt(0) || "R"}</span>
+                        <span className="font-semibold text-green-400">{group.groupName?.charAt(0) || "R"}</span>
                       </div>
                       <div className="flex-1">
-                        <h4 className="font-medium">{group.name || `Rotational ${index + 1}`}</h4>
+                        <h4 className="font-medium">{group.groupName || `Rotational ${index + 1}`}</h4>
                         <p className="text-sm text-gray-400">Next payout: {group.nextPayoutDate || "N/A"}</p>
                       </div>
                       <div className="text-right">
@@ -284,7 +284,7 @@ const DashboardPage = () => {
                     </Link>
                   ))}
                   {rotationalGroups.length > 3 && (
-                    <Link to="/rotational" className="text-green-400 text-sm flex items-center hover:underline">
+                    <Link to="/rotational/${group.groupId}/payments" className="text-green-400 text-sm flex items-center hover:underline">
                       <span>View all rotational groups</span>
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
