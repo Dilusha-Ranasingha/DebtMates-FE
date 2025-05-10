@@ -407,11 +407,15 @@ const CreatePlan = () => {
                 <label className="block text-lg font-medium mb-3 text-gray-800 dark:text-gray-200">
                   Deposit Frequency
                 </label>
-                <Dropdown
+                <Dropdown style={{ width: "100%" , color: "white"}}
+                  placeholder="Select frequency"
                   options={frequencyOptions}
                   value={formData.frequency}
                   onChange={(e) => setFormData({ ...formData, frequency: e.value })}
                   className={`w-full ${errors.frequency ? "p-invalid" : ""}`}
+                  itemTemplate={(option) => (
+                    <span style={{ color: "green" }}>{option.label}</span>
+                  )}
                 />
                 {errors.frequency && (
                   <p className="text-red-500 dark:text-red-400 text-sm mt-2 flex items-center">
