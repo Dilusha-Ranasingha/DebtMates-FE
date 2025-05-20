@@ -101,7 +101,7 @@ const AdminRegister = () => {
         showConfirmButton: false,
         timer: 1500,
       });
-      navigate('/admin-login');
+      // navigate('/admin-login');
     } catch (error) {
       toast.error(error.response?.data || 'Registration failed');
       setLoading(false);
