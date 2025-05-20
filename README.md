@@ -1,107 +1,196 @@
-# 💸 DebtMates Frontend
+# DebtMates Frontend
 
-## 📌 Overview
-DebtMates is a financial management system designed to simplify debt tracking, rotational savings plans, personal savings plans, and user management. This repository contains the frontend implementation of DebtMates, built with React and styled using Tailwind CSS, following best practices for a clean and responsive user interface.
+## Overview
 
-## Features
-- **💳Debt Management**: Allows users to track and settle debts among friends (e.g., splitting restaurant bills) with the help of an algorithm powered by the Gemini API.
-- **🔄Rotational Savings Plan Management**: Manage group-based savings plans with image upload support for rotational plans (images are uploaded to Cloudinary).
-- **🎯Personal Savings Plan Management**: Track and manage individual savings goals.
-- **👥User Management**: Includes user registration, login, email verification, password reset, and admin functionalities.
-- **📱Responsive UI**: Built with Tailwind CSS for a modern and responsive design.
+This repository contains the frontend for *DebtMates*, a platform designed to simplify group financial management, including debt tracking, rotational savings, and personal savings plans. The frontend is built using **React** with **Vite** as the build tool, and it integrates with the *DebtMates* backend (maintained in a separate repository https://github.com/Dilusha-Ranasingha/DebtMates-BE.git) to provide a seamless user experience. The application features a responsive UI, protected routes for authenticated users, and various pages for managing groups, debts, rotational plans, and personal savings.
 
-## 🛠️Technologies Used
+<img width="782" alt="debtmateswall" src="https://github.com/user-attachments/assets/279271e9-395d-4177-8033-16d77f0a4eea" />
+
+
+## Table of Contents
+
+- [Features](#features)
+- [Technologies](#technologies)
+- [Folder Structure](#folder-structure)
+- [Setup Instructions](#setup-instructions)
+- [Routing](#routing)
+- [Dependencies](#dependencies)
+- [Contributing](#contributing)
+- [License](#license)
+
+## 🌟Features
+
+- **Responsive UI**: Built with Tailwind CSS for a mobile-friendly and modern design.
+- **User Authentication**: Pages for user/admin login, registration, and password reset.
+- **Protected Routes**: Ensures only authenticated users can access certain pages, with role-based access for admins.
+- **Group Management**: Create, edit, and manage groups, including adding members and recording debts.
+- **Debt Tracking**: View debt summaries and record debts within groups.
+- **Rotational Savings**: Manage rotational savings groups, create plans, handle payments, and upload payment slips.
+- **Personal Savings Plans**: Create, update, and view personal savings plans with deposit tracking.
+- **Admin Dashboard**: Admin-specific pages for managing users and viewing activity logs.
+- **Charts and Visualizations**: Integrated Chart.js for visualizing financial data.
+- **Notifications**: Uses React Toastify and SweetAlert2 for user feedback.
+- **PDF Generation**: Supports generating PDFs using html2pdf.js for reports or summaries.
+
+## 💻Technologies
+
 - **React**: JavaScript library for building the user interface.
+- **Vite**: Fast build tool and development server.
+- **React Router**: Handles client-side routing.
 - **Tailwind CSS**: Utility-first CSS framework for styling.
-- **Cloudinary**: Cloud storage for uploading and managing images for rotational plans.
-- **Gemini API**: Integrated for debt calculation algorithms using JSON format.
-- **React Best Practices**: Modular components, custom hooks, and organized folder structure.
-
-## 🛠️ Tech Stack
-| Layer         | Technology            |
-|---------------|------------------------|
-| Frontend      | React.js              |
-| Styling       | Tailwind CSS          |
-| Media Storage | Cloudinary            |
-| AI Integration| Gemini API (Google)   |
+- **Axios**: For making HTTP requests to the backend API.
+- **Chart.js & React-Chartjs-2**: For rendering charts and financial data visualizations.
+- **PrimeReact & PrimeIcons**: UI component library for enhanced user experience.
+- **React Datepicker**: For date selection in forms.
+- **React Hot Toast & React Toastify**: For displaying notifications.
+- **SweetAlert2**: For enhanced alert dialogs.
+- **html2pdf.js**: For generating PDF documents.
+- **Lucide React**: Icon library for UI elements.
+- **Heroicons**: Additional icons for the UI.
+- **ESLint**: For linting and maintaining code quality.
 
 ## 📂Folder Structure
-- `src/components/`: Reusable UI components (e.g., `DebtTable`, `GroupCard`, `MemberSelector`).
-- `src/pages/`: Page components for different sections (e.g., `AdminPages`, `GroupPages`, `RotationalPlanPages`).
-- `src/hooks/`: Custom hooks for managing state and logic (e.g., `useAuth`, `useDebt`, `useGroup`).
-- `src/services/`: API service layer for backend communication (`api.js`).
-- `src/styles/`: Global styles (`index.css`).
-- `src/utils/`: Utility functions (e.g., `passwordStrength`, `validateForm`).
 
-## 📦Setup Instructions
+```
+DEBTMATES-FE/
+├── public/                    # Static assets (e.g., images, favicon)
+├── src/                       # Source code
+│   ├── assets/                # Images, fonts, and other static assets
+│   ├── components/            # Reusable React components (e.g., Navbar, Footer)
+│   ├── hooks/                 # Custom React hooks
+│   ├── pages/                 # Page components
+│   │   ├── AdminPages/        # Admin-specific pages (e.g., AdminDashboard, AdminLogin)
+│   │   ├── CommonPages/       # Shared pages (e.g., Profile, PasswordReset)
+│   │   ├── GroupPages/        # Group-related pages (e.g., CreateGroup, DebtSummary)
+│   │   ├── PersonalSavingPages/ # Personal savings pages (e.g., CreatePlan, ViewPlan)
+│   │   ├── RotationalPlanPages/ # Rotational savings pages (e.g., CreateRotationalGroup)
+│   │   ├── UserPages/         # User-specific pages (e.g., UserLogin, UserRegister)
+│   │   ├── About.jsx          # About Us page
+│   │   ├── DashboardPage.jsx  # Main dashboard page
+│   │   ├── Home.jsx           # Landing page
+│   │   ├── PrivacyPolicy.jsx  # Privacy policy page
+│   │   └── TermsOfService.jsx # Terms of service page
+│   ├── services/              # API service functions for backend communication
+│   ├── store/                 # State management (if applicable)
+│   ├── styles/                # Global styles (e.g., Tailwind CSS configurations)
+│   ├── utils/                 # Utility functions and helpers
+│   ├── App.jsx                # Main app component with routing
+│   └── main.jsx               # Entry point for the React app
+├── .gitignore                 # Git ignore file
+├── eslint.config.js           # ESLint configuration
+├── index.html                 # HTML entry point
+├── package-lock.json          # Lock file for dependencies
+├── package.json               # Project metadata and dependencies
+├── README.md                  # Project documentation
+└── vite.config.js             # Vite configuration
+```
+
+## 🚀Setup Instructions
+
+### Prerequisites
+
+- **Node.js 18+**: Ensure Node.js and npm are installed.
+- **Git**: For cloning the repository.
+- **Backend API**: The *DebtMates* backend must be running and accessible (refer to the backend repository for setup).
+
+### Steps
+
 1. **Clone the Repository**:
    ```bash
    git clone https://github.com/Dilusha-Ranasingha/DebtMates-FE.git
-   cd DebtMates-FE
+   cd debtmates-fe
    ```
+
 2. **Install Dependencies**:
    ```bash
    npm install
    ```
-3. **Environment Variables**:
-   - Create a `.env` file in the root directory.
-   - Add necessary environment variables for API communication and Cloudinary:
-     ```
-     REACT_APP_API_URL=http://localhost:8080/api
-     REACT_APP_CLOUDINARY_URL=<your-cloudinary-url>
-     REACT_APP_CLOUDINARY_CLOUD_NAME=<your-cloudinary-cloud-name>
-     REACT_APP_CLOUDINARY_API_KEY=<your-cloudinary-api-key>
-     ```
-4. **Run the Application**:
-   ```bash
-   npm start
+
+3. **Configure Environment Variables**:
+   Create a `.env` file in the root directory and add the following:
+   ```env
+   VITE_API_URL=http://localhost:8080/api
    ```
-   The app will run on `http://localhost:5173`.
+   Replace the URL with the actual backend API URL.
 
-## 🔐API Integration
-The frontend interacts with the DebtMates backend via the following endpoints:
-- **Authentication**:
-  - `POST /api/auth/register`: Register a new user.
-  - `POST /api/auth/login`: Log in a user.
-  - `POST /api/auth/logout`: Log out a user.
-  - `POST /api/auth/password-reset/request`: Request a password reset OTP.
-  - `POST /api/auth/password-reset/confirm`: Confirm password reset with OTP.
-- **Debt Management**:
-  - `POST /api/groups/{groupId}/debts`: Record a debt in a group.
-  - `GET /api/groups/{groupId}/debts`: Fetch debts for a group.
-  - `GET /api/users/me/debts`: Fetch debts for the logged-in user.
-- **Rotational Plans**:
-  - `POST /api/rotational/groups`: Create a rotational group.
-  - `PUT /api/rotational/groups/{groupId}`: Edit a rotational group.
-  - `POST /api/rotational/groups/{groupId}/members`: Add members to a rotational group.
-  - `POST /api/rotational/groups/{groupId}/plan`: Add a plan to a rotational group.
-  - `PUT /api/rotational/payments/{paymentId}/slip`: Upload a payment slip (via Cloudinary).
-- **Group Management**:
-  - `POST /api/groups`: Create a new group.
-  - `PUT /api/groups/{groupId}`: Update a group.
-  - `POST /api/groups/{groupId}/members`: Add members to a group.
-- **User Management**:
-  - `GET /api/user/profile`: Fetch user profile.
-  - `PUT /api/user/profile`: Update user profile.
-  - `POST /api/user/change-password`: Change user password.
-  - `GET /api/user/search`: Search users by username or email.
+4. **Run the Development Server**:
+   ```bash
+   npm run dev
+   ```
+   The application will be available at `http://localhost:5173` (or another port if specified by Vite).
 
-## Usage
-- Navigate to different sections like Debt Management, Rotational Plans, or User Profile.
-- Use the debt management feature to input contributions and let the Gemini API calculate debt settlements.
-- Upload images for rotational plans, which are stored in Cloudinary and linked in the database.
+5. **Build for Production**:
+   ```bash
+   npm run build
+   ```
+   The production-ready files will be generated in the `dist/` directory.
 
-## 🙌Contributing
-1. Fork the repository.
-2. Create a new branch (`git checkout -b feature-branch`).
-3. Commit your changes (`git commit -m "Add feature"`).
-4. Push to the branch (`git push origin feature-branch`).
+6. **Preview the Production Build**:
+   ```bash
+   npm run preview
+   ```
+
+7. **Lint the Code**:
+   ```bash
+   npm run lint
+   ```
+   This will run ESLint to check for code quality issues.
+
+## ⼬Routing
+
+The application uses **React Router** for client-side routing. Key routes include:
+
+- `/`: Landing page (`Home`).
+- `/dashboardPage`: Main dashboard (`DashboardPage`).
+- `/user-login` & `/user-register`: User authentication pages.
+- `/admin-login` & `/admin-register`: Admin authentication pages.
+- `/password-reset`: Password reset page.
+- `/profile`: User profile (protected route).
+- `/admin`: Admin dashboard (protected, admin-only).
+- `/dashboard`: Group dashboard (protected route).
+- `/groups/create`: Create a new group (protected).
+- `/groups/:groupId`: View group details (protected).
+- `/groups/:groupId/debts`: Debt summary for a group.
+- `/rotational-page`: Rotational savings overview (protected).
+- `/personal-saving`: Personal savings overview (protected).
+- `/aboutUs`, `/privacy-policy`, `/TermsofService`: Static informational pages.
+- `*`: 404 Not Found page (`NotFound`).
+
+Protected routes require authentication, and some (e.g., `/admin`) require specific roles (e.g., ADMIN).
+
+## Dependencies
+
+### Main Dependencies
+- **react** & **react-dom**: Core React libraries.
+- **react-router-dom**: For routing.
+- **axios**: For API requests.
+- **tailwindcss**: For styling.
+- **primereact** & **primeicons**: UI components and icons.
+- **chart.js** & **react-chartjs-2**: For charts.
+- **react-datepicker**: For date selection.
+- **react-hot-toast** & **react-toastify**: For notifications.
+- **sweetalert2**: For alerts.
+- **html2pdf.js**: For PDF generation.
+- **lucide-react** & **@heroicons/react**: For icons.
+
+### Dev Dependencies
+- **vite**: Build tool and dev server.
+- **@vitejs/plugin-react**: React plugin for Vite.
+- **eslint**: Linting tool.
+- **eslint-plugin-react-hooks** & **eslint-plugin-react-refresh**: ESLint plugins for React.
+
+## ⑂Contributing
+
+Contributions are welcome! Please follow these steps:
+
+1. Fork the repository.🪪
+2. Create a new branch (`git checkout -b feature/your-feature`).
+3. Commit your changes (`git commit -m "Add your feature"`).
+4. Push to the branch (`git push origin feature/your-feature`).
 5. Open a Pull Request.
 
-## 📄License
-This project is licensed under the MIT License.
+Please ensure your code follows the project’s coding standards, adheres to ESLint rules, and includes appropriate tests.
 
-## 🧰Languages and Tools
-<p align="left">
-    <img src="https://skillicons.dev/icons?i=react,vite,git,tailwind" />
-</p>
+## License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
