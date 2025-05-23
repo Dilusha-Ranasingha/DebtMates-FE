@@ -1,13 +1,13 @@
+// src/main.jsx
 import React from 'react';
-import ReactDom from 'react-dom/client';
-import { BrowserRouter } from 'react-router-dom'
-import './styles/index.css'
-import App from './App.jsx'
+import ReactDOM from 'react-dom/client';
+import App from './App.jsx';
+import './styles/index.css';
+import { Toaster } from 'react-hot-toast';
 
-ReactDom.createRoot(document.getElementById('root')).render(
+ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <BrowserRouter> 
-      <App />
-    </BrowserRouter>
-  </React.StrictMode>,
-)
+    <App />
+    {/* <Toaster position="top-right" /> */}
+  </React.StrictMode>
+);
